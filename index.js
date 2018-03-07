@@ -18,10 +18,12 @@
  */
 
 //TODO implement debug
+//TODO mkdir `routers`, `v1`
 
 
 //dependencies
 const path = require('path');
+const load = require('require-all');
 const express = require('express');
 const _ = require('lodash');
 const dotenv = require('dotenv');
@@ -179,6 +181,60 @@ const HELMET_ENABLED = process.env.HELMET_ENABLED;
 if (HELMET_ENABLED) {
   app.use(helmet());
 }
+
+
+/**
+ * @name loadRouters
+ * @description scan for express routers from process.cwd()
+ * @param {Object} [optns] valid routers loading options
+ * @param {String} [optns.cwd] working director to load routers from
+ * @return {Object} object representation of loaded routers
+ * @author lally elias <lallyelias87@mail.com>
+ * @see  {@link https://github.com/felixge/node-require-all}
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+app.loadRouters = function (optns) {
+
+  //default options
+  const options = _.merge({}, {
+    cwd: process.cwd(),
+    exclude: ['node_modules'],
+    suffix: '_router',
+    recursive: true
+  }, optns);
+
+  //prepare routers load options
+  const loadOptions = {
+    dirname: path.resolve(options.cwd, 'routers'),
+    filter: new RegExp(`(.+${options.suffix})\\.js$`),
+    excludeDirs: new RegExp(`^\\.|${options.exclude.join('|^')}$`),
+    recursive: options.recursive
+  };
+
+  //load routers
+  const routers = load(loadOptions);
+
+  return routers;
+
+};
+
+
+app.setup = function (optns) {
+
+  //load routers
+  const routers = app.loadRouters(optns);
+
+  //TODO normalize un versioned routers
+
+  //setup version based routers
+  _.forEach(routers, function (stack, version) {
+    _.forEach(stack, function (router /*, name*/ ) {
+      app.use(`/${version}`, router);
+    });
+  });
+
+};
 
 
 
