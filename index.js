@@ -23,6 +23,8 @@
 
 //dependencies
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
 const load = require('require-all');
 const express = require('express');
 const _ = require('lodash');
@@ -189,8 +191,8 @@ if (HELMET_ENABLED) {
  * @param {Object} [optns] valid routers loading options
  * @param {String} [optns.cwd] working director to load routers from
  * @return {Object} object representation of loaded routers
- * @author lally elias <lallyelias87@mail.com>
  * @see  {@link https://github.com/felixge/node-require-all}
+ * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
  */
@@ -236,6 +238,32 @@ app.setup = function (optns) {
 
 };
 
+
+/**
+ * @name test
+ * @description create https server and start it
+ * @see  {@link https://nodejs.org/api/https.html}
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+app.startTestServer = function (options = {}) {
+
+  //defaults
+  const defaultKey = path.join(__dirname, 'certs', 'server.key');
+  const defaultCrt = path.join(__dirname, 'certs', 'server.crt');
+
+  //merge options
+  options.port = (options.port || process.env.PORT || 3000);
+  options.key = (options.key || fs.readFileSync(defaultKey));
+  options.cert = (options.cert || fs.readFileSync(defaultCrt));
+
+  //create self signed certificates
+  const server = https.createServer(options, app);
+
+  server.listen(options.port);
+
+};
 
 
 module.exports = exports = app;
