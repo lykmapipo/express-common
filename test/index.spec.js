@@ -198,11 +198,13 @@ describe('app', function () {
 
   describe('setup', function () {
 
-    app.setup({ cwd: __dirname });
+    before(function () {
+      app.setup({ cwd: __dirname });
+    });
 
     it('should be able to load v1 routers', function (done) {
       supertest(app)
-        .get('/v1/contacts')
+        .get('/v1.0.0/contacts')
         .set('Accept-Encoding', 'gzip, deflate, br')
         .expect(200)
         .expect('Content-Type', /json/)
@@ -218,7 +220,7 @@ describe('app', function () {
 
     it('should be able to load v2 routers', function (done) {
       supertest(app)
-        .get('/v2/contacts')
+        .get('/v2.0.0/contacts')
         .set('Accept-Encoding', 'gzip, deflate, br')
         .expect(200)
         .expect('Content-Type', /json/)

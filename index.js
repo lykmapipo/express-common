@@ -25,8 +25,11 @@
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+const semver = require('semver');
 const load = require('require-all');
+const traverse = require('traverse');
 const express = require('express');
+const Router = express.Router;
 const _ = require('lodash');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -54,6 +57,23 @@ process.env.NODE_ENV = (process.env.NODE_ENV || 'development');
  * initialize express application
  */
 let app = express();
+
+
+/**
+ * instantiate versioned router
+ */
+app.Router = function (optns) {
+
+  //merge default options
+  const options = _.merge({}, { version: '1' }, optns);
+
+  //instantiate and add resource details
+  const router = new Router(options);
+  router.version = semver.coerce(options.version || '1');
+
+  return router;
+
+};
 
 
 /**
@@ -208,14 +228,31 @@ app.loadRouters = function (optns) {
 
   //prepare routers load options
   const loadOptions = {
-    dirname: path.resolve(options.cwd, 'routers'),
+    dirname: path.resolve(options.cwd),
     filter: new RegExp(`(.+${options.suffix})\\.js$`),
     excludeDirs: new RegExp(`^\\.|${options.exclude.join('|^')}$`),
-    recursive: options.recursive
+    recursive: options.recursive,
+    resolve: function (router) {
+      const isRouter = (_.isFunction(router) && router.name === 'router');
+      if (isRouter) {
+        return router;
+      } else {
+        return undefined;
+      }
+    }
   };
 
   //load routers
-  const routers = load(loadOptions);
+  let routers = load(loadOptions);
+
+  routers = traverse(routers).reduce(function (accumulator, leaf) {
+    const isRouter =
+      (leaf && _.isFunction(leaf) && leaf.name === 'router');
+    if (isRouter) {
+      accumulator.push(leaf);
+    }
+    return accumulator;
+  }, []);
 
   return routers;
 
@@ -224,16 +261,23 @@ app.loadRouters = function (optns) {
 
 app.setup = function (optns) {
 
-  //load routers
+  //load `cwd` routers
   const routers = app.loadRouters(optns);
 
-  //TODO normalize un versioned routers
-
   //setup version based routers
-  _.forEach(routers, function (stack, version) {
-    _.forEach(stack, function (router /*, name*/ ) {
-      app.use(`/${version}`, router);
-    });
+  _.forEach(routers, function (router) {
+
+    //register versioned routers
+    //TODO validate with semver
+    if (router.version && semver.valid(router.version)) {
+      app.use(`/v${router.version}`, router);
+    }
+
+    //register normal routers
+    else {
+      app.use(router);
+    }
+
   });
 
 };
@@ -249,6 +293,8 @@ app.setup = function (optns) {
  */
 app.startTestServer = function (options = {}) {
 
+  //TODO if helmet enable use https else http
+
   //defaults
   const defaultKey = path.join(__dirname, 'certs', 'server.key');
   const defaultCrt = path.join(__dirname, 'certs', 'server.crt');
@@ -258,7 +304,7 @@ app.startTestServer = function (options = {}) {
   options.key = (options.key || fs.readFileSync(defaultKey));
   options.cert = (options.cert || fs.readFileSync(defaultCrt));
 
-  //create self signed certificates
+  //create https server using self signed certificates
   const server = https.createServer(options, app);
 
   server.listen(options.port);
