@@ -5,14 +5,10 @@
 process.env.NODE_ENV = 'test';
 process.env.LOG_ENABLED = false;
 process.env.LOG_FORMAT = 'tiny';
-process.env.CORS_ENABLED = true;
-process.env.COMPRESSION_ENABLED = true;
 process.env.SERVE_STATIC = true;
 process.env.SERVE_STATIC_PATH = './test/fixtures'; //relative to process.cwd()
-process.env.BODY_PARSER_ENABLED = true;
-process.env.BODY_PARSER_JSON_LIMIT = '2mb';
+process.env.BODY_PARSER_LIMIT = '2mb';
 process.env.BODY_PARSER_JSON_TYPE = 'application/json';
-process.env.METHOD_OVERRIDE_ENABLED = true;
 process.env.HELMET_HSTS = false;
 
 
@@ -33,23 +29,23 @@ describe('app', function () {
   describe('env', function () {
 
     it('should have default runtime environment', function () {
-      const env = app.env;
+      const env = app.get('env');
       expect(env).to.exist;
       expect(env).to.be.equal('test');
     });
 
-    it('should be able to runtime environment', function () {
+    it('should be able to change runtime environment', function () {
       //remember
-      const last = app.env;
+      const last = app.get('env');
 
-      app.env = 'stage';
-      const env = app.env;
+      app.set('env', 'stage');
+      const env = app.get('env');
       expect(env).to.exist;
       expect(env).to.be.equal('stage');
       expect(env).to.not.be.equal(last);
 
       //restore
-      app.env = last;
+      app.set('env', last);
     });
 
   });

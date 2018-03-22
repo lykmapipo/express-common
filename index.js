@@ -23,7 +23,6 @@
 //dependencies
 const path = require('path');
 const express = require('@lykmapipo/express-request-extra');
-const _ = require('lodash');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -89,16 +88,14 @@ app.Router = require('@lykmapipo/express-router-extra').Router;
  */
 app.set('env', process.env.NODE_ENV);
 
-//define `env` getter and setter
-Object.defineProperty(app, 'env', {
-  get: function () { //get runtime environment
-    return app.get('env');
-  },
-  set: function (env) { //set runtime environment
-    env = !_.isEmpty(env) ? env : 'development';
-    app.set('env', env);
-  }
-});
+
+/**
+ * set application port
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+app.set('port', process.env.PORT || 5000);
 
 
 /**
@@ -122,10 +119,7 @@ if (LOG_ENABLED) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const CORS_ENABLED = process.env.CORS_ENABLED;
-if (CORS_ENABLED) {
-  app.use(cors());
-}
+app.use(cors());
 
 
 /**
@@ -135,10 +129,7 @@ if (CORS_ENABLED) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const COMPRESSION_ENABLED = process.env.COMPRESSION_ENABLED;
-if (COMPRESSION_ENABLED) {
-  app.use(compression());
-}
+app.use(compression());
 
 
 /**
@@ -151,31 +142,39 @@ if (COMPRESSION_ENABLED) {
  */
 const SERVE_STATIC = process.env.SERVE_STATIC;
 if (SERVE_STATIC) {
-  const STATIC_PATH = process.env.SERVE_STATIC_PATH || './public';
+  const STATIC_PATH = process.env.SERVE_STATIC_PATH || 'public';
   app.use(express.static(path.resolve(process.cwd(), STATIC_PATH)));
 }
 
 
 /**
  * use body-parser middleware
- * @see {@link https://github.com/expressjs/body-parser}
+ * @description parse application/x-www-form-urlencoded bodies
+ * @see {@link https: //github.com/expressjs/body-parser}
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
  */
-
-//parse application/x-www-form-urlencoded bodies
+const BODY_PARSER_LIMIT = (process.env.BODY_PARSER_LIMIT || '2mb');
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: BODY_PARSER_LIMIT
 }));
 
-//parse application/*+json bodies
-const BODY_PARSER_JSON_LIMIT = (process.env.BODY_PARSER_JSON_LIMIT || '2mb');
+
+/**
+ * use body-parser middleware
+ * @description parse application/*+json bodies
+ * @see {@link https: //github.com/expressjs/body-parser}
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
 const BODY_PARSER_JSON_TYPE =
-  (process.env.BODY_PARSER_JSON_TYPE || 'application/*+json');
+  (process.env.BODY_PARSER_JSON_TYPE || 'application/json');
 app.use(bodyParser.json({
   type: BODY_PARSER_JSON_TYPE,
-  limit: BODY_PARSER_JSON_LIMIT
+  limit: BODY_PARSER_LIMIT
 }));
 
 
