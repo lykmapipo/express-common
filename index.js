@@ -18,7 +18,6 @@
  */
 
 //TODO implement debug
-//TODO Resource({model:[Object|Model], name: 'contact', version:'1.0.0' router: [Router]})
 
 
 //dependencies
@@ -32,6 +31,7 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const helmet = require('helmet');
+const statuses = require('statuses');
 
 
 /**
@@ -212,7 +212,7 @@ if (HELMET_ENABLED) {
 
 /**
  * @name notFound
- * @description handle non matched 
+ * @description middleware to handle un matched routes 
  * @param  {Request}   request  valid express http request
  * @param  {Response}   response valid express http response
  * @param  {Function} next middlware to pass control into
@@ -227,6 +227,8 @@ app.notFound = function notFound(request, response, next) {
 };
 
 
+/*jshint unused:false */
+
 /**
  * @name handleError
  * @param  {Request}   request  valid express http request
@@ -235,24 +237,61 @@ app.notFound = function notFound(request, response, next) {
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
+ * @see  {@link http://jsonapi.org/examples/#error-objects}
  */
-app.handleError = function (error, request, response /*, next*/ ) {
+app.errorHandler = function errorHandler(error, request, response, next) {
 
   //obtain app environment
   const isProduction = (process.env.NODE_ENV === 'production');
+  const status = (error.status || error.statusCode || 500);
 
   //reply with error
-  response.status(error.status || 500);
+  response.status(status);
   response.json({
-    success: false,
-    message: error.message,
-    error: isProduction ? {
-      status: error.code || error.status,
-      description: error.description || error.message
-    } : error
+    status: status,
+    code: error.code,
+    name: (error.name || error.title),
+    type: error.type,
+    detail: error.detail,
+    message: error.message || statuses[status],
+    stack: error.stack
   });
 
 };
 
+/*jshint unused:true */
 
+
+
+/**
+ * @name handleNotFound
+ * @description handle non matched routes 
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+app.handleNotFound = function handleNotFound(notFound) {
+  const middleware = notFound || app.notFound;
+  app.use(middleware);
+};
+
+
+/**
+ * @name handleErrors
+ * @description handle errors
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ * @public
+ * @see  {@link http://jsonapi.org/examples/#error-objects}
+ */
+app.handleErrors = function handleError(errorHandler) {
+  const middleware = errorHandler || app.errorHandler;
+  app.use(middleware);
+};
+
+
+/**
+ * export
+ */
 module.exports = exports = app;
