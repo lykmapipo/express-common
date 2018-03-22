@@ -37,8 +37,12 @@ const path = require('path');
 const mount = require('@lykmapipo/express-router-extra').mount;
 const app = require(path.join(__dirname, '..'));
 
-//mount routers
+//mount routers from specified path
 mount('./routers/v1', './routers/v2').into(app);
+
+//mount router instances
+mount(userRouter, paymentRouter).into(app);
+
 
 app.handleNotFound();
 app.handleErrors();
