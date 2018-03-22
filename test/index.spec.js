@@ -155,29 +155,6 @@ describe('app', function () {
 
   });
 
-
-  describe('helmet', function () {
-
-    app.get('/helmets', function (request, response) {
-      response.json({});
-    });
-
-    it('should set `helmet` middleware', function (done) {
-      supertest(app)
-        .get('/helmets')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .expect('Access-Control-Allow-Origin', '*')
-        .expect('X-DNS-Prefetch-Control', 'off')
-        .expect('X-FRAME-Options', 'SAMEORIGIN')
-        .expect('X-Download-Options', 'noopen')
-        .expect('X-Content-Type-Options', 'nosniff')
-        .expect('X-XSS-Protection', '1; mode=block')
-        .end(done);
-    });
-
-  });
-
   describe('overrides', function () {
 
     app.all('/overrides', function (request, response) {
@@ -225,6 +202,29 @@ describe('app', function () {
         .post('/overrides?_method=DELETE')
         .expect(200)
         .expect('X-Got-Method', 'DELETE')
+        .end(done);
+    });
+
+  });
+
+
+  describe('helmet', function () {
+
+    app.get('/helmets', function (request, response) {
+      response.json({});
+    });
+
+    it('should set `helmet` middleware', function (done) {
+      supertest(app)
+        .get('/helmets')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect('Access-Control-Allow-Origin', '*')
+        .expect('X-DNS-Prefetch-Control', 'off')
+        .expect('X-FRAME-Options', 'SAMEORIGIN')
+        .expect('X-Download-Options', 'noopen')
+        .expect('X-Content-Type-Options', 'nosniff')
+        .expect('X-XSS-Protection', '1; mode=block')
         .end(done);
     });
 

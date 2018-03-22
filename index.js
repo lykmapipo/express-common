@@ -163,29 +163,25 @@ if (SERVE_STATIC) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const BODY_PARSER_ENABLED = process.env.BODY_PARSER_ENABLED;
-if (BODY_PARSER_ENABLED) {
 
-  //parse application/x-www-form-urlencoded bodies
-  app.use(bodyParser.urlencoded({
-    extended: true
-  }));
+//parse application/x-www-form-urlencoded bodies
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
-  //parse application/*+json bodies
-  const BODY_PARSER_JSON_LIMIT = (process.env.BODY_PARSER_JSON_LIMIT || '2mb');
-  const BODY_PARSER_JSON_TYPE =
-    (process.env.BODY_PARSER_JSON_TYPE || 'application/*+json');
-  app.use(bodyParser.json({
-    type: BODY_PARSER_JSON_TYPE,
-    limit: BODY_PARSER_JSON_LIMIT
-  }));
-
-}
+//parse application/*+json bodies
+const BODY_PARSER_JSON_LIMIT = (process.env.BODY_PARSER_JSON_LIMIT || '2mb');
+const BODY_PARSER_JSON_TYPE =
+  (process.env.BODY_PARSER_JSON_TYPE || 'application/*+json');
+app.use(bodyParser.json({
+  type: BODY_PARSER_JSON_TYPE,
+  limit: BODY_PARSER_JSON_LIMIT
+}));
 
 
 /**
  * use method-override middleware
- * @see  {@link http://expressjs.com/en/starter/static-files.html}
+ * @see {@link https://github.com/expressjs/method-override}
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
