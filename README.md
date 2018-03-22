@@ -11,7 +11,6 @@ It use below packages:
 - [body-parser](https://github.com/expressjs/body-parser)
 - [compression](https://github.com/expressjs/compression)
 - [cors](https://github.com/expressjs/cors)
-- [debug]()
 - [dotenv](https://github.com/motdotla/dotenv)
 - [helmet](https://github.com/helmetjs/helmet)
 - [method-override](https://github.com/expressjs/method-override)
