@@ -23,8 +23,6 @@
 
 //dependencies
 const path = require('path');
-const fs = require('fs');
-const https = require('https');
 const semver = require('semver');
 const load = require('require-all');
 const traverse = require('traverse');
@@ -43,7 +41,7 @@ const helmet = require('helmet');
  * load configuration from .env file
  * @see  {@link https://github.com/motdotla/dotenv}
  */
-dotenv.load();
+dotenv.load(); //TODO attack to app
 
 
 /**
@@ -196,7 +194,7 @@ if (METHOD_OVERRIDE_ENABLED) {
  */
 const HELMET_ENABLED = process.env.HELMET_ENABLED;
 if (HELMET_ENABLED) {
-  app.use(helmet());
+  app.use(helmet({ hsts: false }));
 }
 
 
@@ -320,35 +318,6 @@ app.handleError = function (error, request, response /*, next*/ ) {
       description: error.description || error.message
     } : error
   });
-
-};
-
-
-/**
- * @name startTestServer
- * @description create https server and start it
- * @see  {@link https://nodejs.org/api/https.html}
- * @author lally elias <lallyelias87@mail.com>
- * @since  0.1.0
- * @version 0.1.0
- */
-app.startTestServer = function (options = {}) {
-
-  //TODO if helmet enable use https else http
-
-  //defaults
-  const defaultKey = path.join(__dirname, 'certs', 'server.key');
-  const defaultCrt = path.join(__dirname, 'certs', 'server.crt');
-
-  //merge options
-  options.port = (options.port || process.env.PORT || 3000);
-  options.key = (options.key || fs.readFileSync(defaultKey));
-  options.cert = (options.cert || fs.readFileSync(defaultCrt));
-
-  //create https server using self signed certificates
-  const server = https.createServer(options, app);
-
-  server.listen(options.port);
 
 };
 

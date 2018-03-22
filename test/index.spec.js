@@ -170,8 +170,6 @@ describe('app', function () {
         .expect('Access-Control-Allow-Origin', '*')
         .expect('X-DNS-Prefetch-Control', 'off')
         .expect('X-FRAME-Options', 'SAMEORIGIN')
-        .expect('Strict-Transport-Security',
-          'max-age=15552000; includeSubDomains')
         .expect('X-Download-Options', 'noopen')
         .expect('X-Content-Type-Options', 'nosniff')
         .expect('X-XSS-Protection', '1; mode=block')
