@@ -2,9 +2,16 @@
 
 
 //dependencies
-const path = require('path');
 const app = require('@lykmapipo/express-common');
+
+//...setup database & model
 
 app.setup({ cwd: __dirname });
 
-app.startTestServer();
+// ...additional setup
+
+//...setup error handler
+// app.handleError();
+
+//start serve & handle request
+app.serve();

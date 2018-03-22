@@ -18,7 +18,7 @@
  */
 
 //TODO implement debug
-//TODO mkdir `routers`, `v1`
+//TODO Resource({model:[Object|Model], name: 'contact', version:'1.0.0' router: [Router]})
 
 
 //dependencies
@@ -48,19 +48,25 @@ dotenv.load();
 
 
 /**
- * ensure runtime environment
+ * ensure process runtime environment
+ * @default development
  */
 process.env.NODE_ENV = (process.env.NODE_ENV || 'development');
 
 
 /**
+ * @name app
  * initialize express application
  */
-let app = express();
+const app = express();
 
 
 /**
- * instantiate versioned router
+ * @name Router
+ * @description factory to create express router with version
+ * @param {Object} [optns] valid express router options plus its version
+ * @param {String|Number} [optns.version] valid router version. default to 1
+ * @return {} [description]
  */
 app.Router = function (optns) {
 
@@ -162,12 +168,12 @@ if (SERVE_STATIC) {
 const BODY_PARSER_ENABLED = process.env.BODY_PARSER_ENABLED;
 if (BODY_PARSER_ENABLED) {
 
-  //parse application/x-www-form-urlencoded
+  //parse application/x-www-form-urlencoded bodies
   app.use(bodyParser.urlencoded({
     extended: true
   }));
 
-  //parse application/json
+  //parse application/*+json bodies
   const BODY_PARSER_JSON_LIMIT = (process.env.BODY_PARSER_JSON_LIMIT || '2mb');
   const BODY_PARSER_JSON_TYPE =
     (process.env.BODY_PARSER_JSON_TYPE || 'application/*+json');
@@ -188,6 +194,7 @@ if (BODY_PARSER_ENABLED) {
  */
 const METHOD_OVERRIDE_ENABLED = process.env.METHOD_OVERRIDE_ENABLED;
 if (METHOD_OVERRIDE_ENABLED) {
+  //TODO support header
   app.use(methodOverride('_method'));
 }
 
@@ -229,7 +236,7 @@ app.loadRouters = function (optns) {
   //prepare routers load options
   const loadOptions = {
     dirname: path.resolve(options.cwd),
-    filter: new RegExp(`(.+${options.suffix})\\.js$`),
+    // filter: new RegExp(`(.+${options.suffix})\\.js$`),
     excludeDirs: new RegExp(`^\\.|${options.exclude.join('|^')}$`),
     recursive: options.recursive,
     resolve: function (router) {
@@ -245,6 +252,7 @@ app.loadRouters = function (optns) {
   //load routers
   let routers = load(loadOptions);
 
+  //ensure only router instance are loaded
   routers = traverse(routers).reduce(function (accumulator, leaf) {
     const isRouter =
       (leaf && _.isFunction(leaf) && leaf.name === 'router');
@@ -284,7 +292,52 @@ app.setup = function (optns) {
 
 
 /**
- * @name test
+ * @name notFound
+ * @description handle non matched 
+ * @param  {Request}   request  valid express http request
+ * @param  {Response}   response valid express http response
+ * @param  {Function} next middlware to pass control into
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+app.notFound = function notFound(request, response, next) {
+  let error = new Error('Not Found');
+  error.status = 404;
+  next(error);
+};
+
+
+/**
+ * @name handleError
+ * @param  {Request}   request  valid express http request
+ * @param  {Response}   response valid express http response
+ * @param  {Function} next middlware to pass control into
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+app.handleError = function (error, request, response /*, next*/ ) {
+
+  //obtain app environment
+  const isProduction = (process.env.NODE_ENV === 'production');
+
+  //reply with error
+  response.status(error.status || 500);
+  response.json({
+    success: false,
+    message: error.message,
+    error: isProduction ? {
+      status: error.code || error.status,
+      description: error.description || error.message
+    } : error
+  });
+
+};
+
+
+/**
+ * @name startTestServer
  * @description create https server and start it
  * @see  {@link https://nodejs.org/api/https.html}
  * @author lally elias <lallyelias87@mail.com>
