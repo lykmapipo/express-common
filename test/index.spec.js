@@ -13,7 +13,7 @@ process.env.BODY_PARSER_ENABLED = true;
 process.env.BODY_PARSER_JSON_LIMIT = '2mb';
 process.env.BODY_PARSER_JSON_TYPE = 'application/json';
 process.env.METHOD_OVERRIDE_ENABLED = true;
-process.env.HELMET_ENABLED = true;
+process.env.HELMET_HSTS = false;
 
 
 //dependencies
@@ -173,6 +173,58 @@ describe('app', function () {
         .expect('X-Download-Options', 'noopen')
         .expect('X-Content-Type-Options', 'nosniff')
         .expect('X-XSS-Protection', '1; mode=block')
+        .end(done);
+    });
+
+  });
+
+  describe('overrides', function () {
+
+    app.all('/overrides', function (request, response) {
+      response.set('X-Got-Method', request.method);
+      response.json(request.body);
+    });
+
+    it('should set `overrides` middleware', function (done) {
+      supertest(app)
+        .get('/overrides')
+        .expect(200)
+        .expect('X-Got-Method', 'GET')
+        .end(done);
+    });
+
+    it('should set `overrides` middleware', function (done) {
+      supertest(app)
+        .post('/overrides')
+        .set('X-HTTP-Method', 'DELETE')
+        .expect(200)
+        .expect('X-Got-Method', 'DELETE')
+        .end(done);
+    });
+
+    it('should set `overrides` middleware', function (done) {
+      supertest(app)
+        .post('/overrides')
+        .set('X-HTTP-Method-Override', 'DELETE')
+        .expect(200)
+        .expect('X-Got-Method', 'DELETE')
+        .end(done);
+    });
+
+    it('should set `overrides` middleware', function (done) {
+      supertest(app)
+        .post('/overrides')
+        .set('X-Method-Override', 'DELETE')
+        .expect(200)
+        .expect('X-Got-Method', 'DELETE')
+        .end(done);
+    });
+
+    it('should set `overrides` middleware', function (done) {
+      supertest(app)
+        .post('/overrides?_method=DELETE')
+        .expect(200)
+        .expect('X-Got-Method', 'DELETE')
         .end(done);
     });
 

@@ -190,11 +190,10 @@ if (BODY_PARSER_ENABLED) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const METHOD_OVERRIDE_ENABLED = process.env.METHOD_OVERRIDE_ENABLED;
-if (METHOD_OVERRIDE_ENABLED) {
-  //TODO support header
-  app.use(methodOverride('_method'));
-}
+app.use(methodOverride('X-HTTP-Method')); // Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
+app.use(methodOverride('X-Method-Override')); // IBM
+app.use(methodOverride('_method')); // query param
 
 
 /**
@@ -204,8 +203,10 @@ if (METHOD_OVERRIDE_ENABLED) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const HELMET_ENABLED = process.env.HELMET_ENABLED;
-if (HELMET_ENABLED) {
+const HELMET_HSTS = process.env.HELMET_HSTS;
+if (HELMET_HSTS) {
+  app.use(helmet());
+} else {
   app.use(helmet({ hsts: false }));
 }
 
