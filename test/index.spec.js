@@ -18,7 +18,7 @@ process.env.HELMET_ENABLED = true;
 
 //dependencies
 const path = require('path');
-const _ = require('lodash');
+// const _ = require('lodash');
 const supertest = require('supertest');
 const expect = require('chai').expect;
 const app = require(path.join(__dirname, '..'));
@@ -174,62 +174,6 @@ describe('app', function () {
         .expect('X-Content-Type-Options', 'nosniff')
         .expect('X-XSS-Protection', '1; mode=block')
         .end(done);
-    });
-
-  });
-
-  describe('loadRouters', function () {
-
-    it('should be a function', function () {
-      expect(app.loadRouters).to.exist;
-      expect(app.loadRouters).to.be.a('function');
-      expect(app.loadRouters.length).to.be.equal(1);
-    });
-
-    it('should be able to load routers', function () {
-      const routers = app.loadRouters({ cwd: __dirname });
-      expect(routers).to.exist;
-      expect(_.keys(routers)).to.have.length(2);
-    });
-
-  });
-
-  describe('setup', function () {
-
-    before(function () {
-      app.setup({ cwd: __dirname });
-    });
-
-    it('should be able to load v1 routers', function (done) {
-      supertest(app)
-        .get('/v1.0.0/contacts')
-        .set('Accept-Encoding', 'gzip, deflate, br')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .expect('Access-Control-Allow-Origin', '*')
-        .end(function (error, response) {
-          expect(error).to.not.exist;
-          expect(response).to.exist;
-          expect(response.body).to.exist;
-          expect(response.body[0].mobile).to.not.exist;
-          done(error, response);
-        });
-    });
-
-    it('should be able to load v2 routers', function (done) {
-      supertest(app)
-        .get('/v2.0.0/contacts')
-        .set('Accept-Encoding', 'gzip, deflate, br')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .expect('Access-Control-Allow-Origin', '*')
-        .end(function (error, response) {
-          expect(error).to.not.exist;
-          expect(response).to.exist;
-          expect(response.body).to.exist;
-          expect(response.body[0].mobile).to.exist;
-          done(error, response);
-        });
     });
 
   });

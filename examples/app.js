@@ -3,12 +3,13 @@
 
 //dependencies
 const path = require('path');
-// const app = require('@lykmapipo/express-common');
+const mount = require('@lykmapipo/express-router-extra').mount;
 const app = require(path.join(__dirname, '..'));
 
 //...setup database & model
 
-app.setup({ cwd: __dirname });
+//load routers
+mount('./routers/v1', './routers/v2').into(app);
 
 // ...additional setup
 

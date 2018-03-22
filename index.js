@@ -23,10 +23,7 @@
 
 //dependencies
 const path = require('path');
-const semver = require('semver');
-const load = require('require-all');
-const traverse = require('traverse');
-const express = require('express');
+const express = require('@lykmapipo/express-request-extra');
 const _ = require('lodash');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -38,10 +35,18 @@ const helmet = require('helmet');
 
 
 /**
- * load configuration from .env file
+ * ensure process BASE_PATH
+ * @default process.cwd()
+ */
+process.env.BASE_PATH =
+  path.resolve(process.env.BASE_PATH || process.cwd());
+
+
+/**
+ * load configuration from .env file from BASE_PATH
  * @see  {@link https://github.com/motdotla/dotenv}
  */
-dotenv.load(); //TODO attack to app
+dotenv.load({ path: process.env.BASE_PATH });
 
 
 /**
@@ -52,7 +57,14 @@ process.env.NODE_ENV = (process.env.NODE_ENV || 'development');
 
 
 /**
- * @name app
+ * ensure process APP_PATH
+ * @default process.cwd()
+ */
+process.env.APP_PATH =
+  path.resolve(process.env.BASE_PATH, process.env.APP_PATH || '');
+
+
+/**
  * initialize express application
  */
 const app = express();
@@ -196,85 +208,6 @@ const HELMET_ENABLED = process.env.HELMET_ENABLED;
 if (HELMET_ENABLED) {
   app.use(helmet({ hsts: false }));
 }
-
-
-/**
- * @name loadRouters
- * @description scan for express routers from process.cwd()
- * @param {Object} [optns] valid routers loading options
- * @param {String} [optns.cwd] working director to load routers from
- * @return {Object} object representation of loaded routers
- * @see  {@link https://github.com/felixge/node-require-all}
- * @author lally elias <lallyelias87@mail.com>
- * @since  0.1.0
- * @version 0.1.0
- */
-app.loadRouters = function (optns) {
-
-  //default options
-  const options = _.merge({}, {
-    cwd: process.cwd(),
-    exclude: ['node_modules'],
-    suffix: '_router',
-    recursive: true
-  }, optns);
-
-  //prepare routers load options
-  const loadOptions = {
-    dirname: path.resolve(options.cwd),
-    // filter: new RegExp(`(.+${options.suffix})\\.js$`),
-    excludeDirs: new RegExp(`^\\.|${options.exclude.join('|^')}$`),
-    recursive: options.recursive,
-    resolve: function (router) {
-      const isRouter = (_.isFunction(router) && router.name === 'router');
-      if (isRouter) {
-        return router;
-      } else {
-        return undefined;
-      }
-    }
-  };
-
-  //load routers
-  let routers = load(loadOptions);
-
-  //ensure only router instance are loaded
-  routers = traverse(routers).reduce(function (accumulator, leaf) {
-    const isRouter =
-      (leaf && _.isFunction(leaf) && leaf.name === 'router');
-    if (isRouter) {
-      accumulator.push(leaf);
-    }
-    return accumulator;
-  }, []);
-
-  return routers;
-
-};
-
-
-app.setup = function (optns) {
-
-  //load `cwd` routers
-  const routers = app.loadRouters(optns);
-
-  //setup version based routers
-  _.forEach(routers, function (router) {
-
-    //register versioned routers
-    //TODO validate with semver
-    if (router.version && semver.valid(router.version)) {
-      app.use(`/v${router.version}`, router);
-    }
-
-    //register normal routers
-    else {
-      app.use(router);
-    }
-
-  });
-
-};
 
 
 /**
