@@ -2,8 +2,8 @@
 
 
 //dependencies
-const common = require('@lykmapipo/express-common');
-const router = common.Router({ version: '2.0.0' });
+const Router = require('@lykmapipo/express-router-extra').Router;
+const router = Router({ version: '2.0.0' });
 
 //local values
 const contacts = [

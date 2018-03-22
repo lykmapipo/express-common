@@ -2,7 +2,9 @@
 
 
 //dependencies
-const app = require('@lykmapipo/express-common');
+const path = require('path');
+// const app = require('@lykmapipo/express-common');
+const app = require(path.join(__dirname, '..'));
 
 //...setup database & model
 
@@ -14,4 +16,4 @@ app.setup({ cwd: __dirname });
 // app.handleError();
 
 //start serve & handle request
-app.serve();
+app.listen(app.get('port') || process.env.PORT || 5000);
