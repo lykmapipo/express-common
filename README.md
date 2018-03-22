@@ -32,13 +32,18 @@ $ npm install --save @lykmapipo/express-common
 ## Usage
 
 ```javascript
-const http = require('http');
-const app = require('@lykmapipo/express-common');
+//dependencies
+const path = require('path');
+const mount = require('@lykmapipo/express-router-extra').mount;
+const app = require(path.join(__dirname, '..'));
 
-...additional setups
+//mount routers
+mount('./routers/v1', './routers/v2').into(app);
 
-const server = http.createServer(app);
-server.listen(3000);
+app.handleNotFound();
+app.handleErrors();
+
+app.listen(app.get('port') || process.env.PORT || 5000);
 
 ```
 
