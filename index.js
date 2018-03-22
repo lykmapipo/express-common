@@ -29,7 +29,6 @@ const semver = require('semver');
 const load = require('require-all');
 const traverse = require('traverse');
 const express = require('express');
-const Router = express.Router;
 const _ = require('lodash');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
@@ -68,18 +67,7 @@ const app = express();
  * @param {String|Number} [optns.version] valid router version. default to 1
  * @return {} [description]
  */
-app.Router = function (optns) {
-
-  //merge default options
-  const options = _.merge({}, { version: '1' }, optns);
-
-  //instantiate and add resource details
-  const router = new Router(options);
-  router.version = semver.coerce(options.version || '1');
-
-  return router;
-
-};
+app.Router = require('@lykmapipo/express-router-extra').Router;
 
 
 /**
