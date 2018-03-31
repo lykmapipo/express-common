@@ -7,6 +7,11 @@
     "express",
     "express-common",
     "starter",
+    "common",
+    "rapid",
+    "sinatra",
+    "rest",
+    "restify",
     "api"
   ],
   "main": "index.js",
@@ -28,10 +33,12 @@
     "url": "https://github.com/lykmapipo/express-common/issues"
   },
   "homepage": "https://github.com/lykmapipo/express-common",
-  "contributors": [{
-    "name": "lykmapipo",
-    "github": "https://github.com/lykmapipo"
-  }],
+  "contributors": [
+    {
+      "name": "lykmapipo",
+      "github": "https://github.com/lykmapipo"
+    }
+  ],
   "devDependencies": {
     "chai": "^4.1.2",
     "faker": "^4.1.0",
@@ -40,8 +47,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha-test": "^0.13.3",
     "jshint-stylish": "^2.2.1",
-    "mocha": "^5.0.4",
-    "nodemon": "^1.17.2",
+    "mocha": "^5.0.5",
+    "nodemon": "^1.17.3",
     "supertest": "^3.0.0"
   },
   "dependencies": {
@@ -57,7 +64,7 @@
     "lodash": "^4.17.5",
     "method-override": "^2.3.10",
     "morgan": "^1.9.0",
-    "statuses": "^1.4.0"
+    "statuses": "^1.5.0"
   },
   "engines": {
     "node": ">=8.6.0",

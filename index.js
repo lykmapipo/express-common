@@ -287,6 +287,9 @@ app.handleErrors = function handleError(errorHandler) {
 };
 
 
+//TODO swagger.json (definition)
+//TODO swagger ui (explore)
+
 /**
  * export
  */
