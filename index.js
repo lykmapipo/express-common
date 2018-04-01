@@ -23,6 +23,8 @@
 //dependencies
 const path = require('path');
 const express = require('@lykmapipo/express-request-extra');
+const Router = require('@lykmapipo/express-router-extra').Router;
+const doMount = require('@lykmapipo/express-router-extra').mount;
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -76,7 +78,7 @@ const app = express();
  * @param {String|Number} [optns.version] valid router version. default to 1
  * @return {} [description]
  */
-app.Router = require('@lykmapipo/express-router-extra').Router;
+app.Router = Router;
 
 
 /**
@@ -284,6 +286,20 @@ app.handleNotFound = function handleNotFound(notFound) {
 app.handleErrors = function handleError(errorHandler) {
   const middleware = errorHandler || app.errorHandler;
   app.use(middleware);
+};
+
+
+/**
+ * @name mount
+ * @description mount router(s) into application
+ * @param {routesr} routers set of routers or paths to load
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ * @public
+ */
+app.mount = function mount(...routers) {
+  return doMount(...routers).into(app);
 };
 
 

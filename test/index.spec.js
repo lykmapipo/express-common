@@ -14,7 +14,7 @@ process.env.HELMET_HSTS = false;
 
 //dependencies
 const path = require('path');
-// const _ = require('lodash');
+const _ = require('lodash');
 const supertest = require('supertest');
 const expect = require('chai').expect;
 const app = require(path.join(__dirname, '..'));
@@ -222,6 +222,97 @@ describe('app', function () {
         .expect('X-Content-Type-Options', 'nosniff')
         .expect('X-XSS-Protection', '1; mode=block')
         .end(done);
+    });
+
+  });
+
+
+  describe('mount', function () {
+
+    it('should be able to mount router into app', function () {
+
+      //initialize & mount
+      const router = new app.Router();
+      router.get('/samples', function (req, res) { res.json(req.body); });
+      const mounted = app.mount(router);
+
+      //after
+      expect(mounted.routers).to.exist;
+      expect(mounted.routers).to.have.length(1);
+      expect(app._router).to.exist;
+      expect(app._router.stack).to.exist;
+      const found =
+        _.find(app._router.stack, ['handle.uuid', router.uuid]);
+      expect(found).to.exist;
+      expect(found.handle).to.eql(router);
+
+    });
+
+    it('should be able to mount router only once into app', function () {
+
+      //initialize & mount
+      const router = new app.Router();
+      router.get('/samples', function (req, res) { res.json(req.body); });
+      const mounted = app.mount(router, router);
+
+      //after
+      expect(mounted.routers).to.exist;
+      expect(mounted.routers).to.have.length(1);
+      expect(app._router).to.exist;
+      expect(app._router.stack).to.exist;
+      const founds =
+        _.filter(app._router.stack, ['handle.uuid', router.uuid]);
+      expect(founds).to.exist;
+      expect(founds).to.have.length(1);
+      expect(_.first(founds).handle).to.eql(router);
+
+    });
+
+    it('should be able to mount routers into app', function () {
+
+      //initialize & mount
+      const routerA = new app.Router();
+      routerA.get('/a', function (req, res) { res.json(req.body); });
+
+      const routerB = new app.Router();
+      routerB.get('/b', function (req, res) { res.json(req.body); });
+
+      const mounted = app.mount(routerA, routerB);
+
+      //after
+      expect(mounted.routers).to.exist;
+      expect(mounted.routers).to.have.length(2);
+      expect(app._router).to.exist;
+      expect(app._router.stack).to.exist;
+
+      const foundA =
+        _.find(app._router.stack, ['handle.uuid', routerA.uuid]);
+      expect(foundA).to.exist;
+      expect(foundA.handle).to.eql(routerA);
+
+      const foundB =
+        _.find(app._router.stack, ['handle.uuid', routerB.uuid]);
+      expect(foundB).to.exist;
+      expect(foundB.handle).to.eql(routerB);
+
+    });
+
+    it('should be able to mount router from paths into app', function () {
+
+      //initialize & mount
+      process.env.CWD =
+        process.env.APP_PATH = path.resolve(__dirname);
+      const mounted = app.mount('./routers/v1');
+
+      //after
+      expect(mounted.routers).to.exist;
+      expect(mounted.routers).to.have.length(1);
+      expect(app._router).to.exist;
+      expect(app._router.stack).to.exist;
+      const routers = _.filter(app._router.stack, ['name', 'router']);
+      expect(routers).to.exist;
+      expect(routers).to.have.length.above(1);
+
     });
 
   });

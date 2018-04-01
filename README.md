@@ -32,16 +32,15 @@ $ npm install --save @lykmapipo/express-common
 
 ```javascript
 //dependencies
-const path = require('path');
-const mount = require('@lykmapipo/express-router-extra').mount;
 const app = require('@lykmapipo/express-common');
 
 //mount routers from specified path
-mount('./routers/v1', './routers/v2').into(app);
+app.mount('./routers/v1', './routers/v2');
 
 //mount router instances
-mount(userRouter, paymentRouter).into(app);
+app.mount(userRouter, paymentRouter);
 
+...
 
 app.handleNotFound();
 app.handleErrors();

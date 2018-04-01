@@ -12,4 +12,6 @@ mount('./routers/v1', './routers/v2').into(app);
 app.handleNotFound();
 app.handleErrors();
 
-app.listen(app.get('port') || process.env.PORT || 5000);
+console.log(app.mount);
+
+// app.listen(app.get('port') || process.env.PORT || 5000);
