@@ -31,21 +31,30 @@ $ npm install --save @lykmapipo/express-common
 ## Usage
 
 ```javascript
+'use strict';
+
 //dependencies
+const path = require('path');
 const app = require('@lykmapipo/express-common');
 
-//mount routers from specified path
-app.mount('./routers/v1', './routers/v2');
+//define router
+const router = new app.Router({
+  version: '1.0.0'
+});
+router.get('/users', ...);
+router.post('/users', ...);
+router.get('/users/:id', ...);
+router.put('/users/:id', ...);
+router.patch('/users/:id', ...);
+router.delete('/users/:id', ...);
 
-//mount router instances
-app.mount(userRouter, paymentRouter);
+//mount routers
+app.mount(router);
 
-...
-
-app.handleNotFound();
-app.handleErrors();
-
-app.listen(app.get('port') || process.env.PORT || 5000);
+//start app
+app.start(function(error, env) {
+  ...
+});
 
 ```
 

@@ -3,15 +3,14 @@
 
 //dependencies
 const path = require('path');
-const mount = require('@lykmapipo/express-router-extra').mount;
 const app = require(path.join(__dirname, '..'));
 
 //mount routers
-mount('./routers/v1', './routers/v2').into(app);
+app.mount('./routers/v1', './routers/v2');
 
-app.handleNotFound();
-app.handleErrors();
-
-console.log(app.mount);
-
-// app.listen(app.get('port') || process.env.PORT || 5000);
+//start app
+app.start(function onStart(error, env) {
+  console.log(`visit http://0.0.0.0:${env.PORT}/v1.0.0/contacts`);
+  console.log('or')
+  console.log(`visit http://0.0.0.0:${env.PORT}/v2.0.0/contacts`);
+});

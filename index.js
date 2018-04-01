@@ -22,6 +22,7 @@
 
 //dependencies
 const path = require('path');
+const _ = require('lodash');
 const express = require('@lykmapipo/express-request-extra');
 const Router = require('@lykmapipo/express-router-extra').Router;
 const doMount = require('@lykmapipo/express-router-extra').mount;
@@ -47,7 +48,11 @@ process.env.BASE_PATH =
  * load configuration from .env file from BASE_PATH
  * @see  {@link https://github.com/motdotla/dotenv}
  */
-dotenv.load({ path: process.env.BASE_PATH });
+const result =
+  dotenv.load({ path: path.resolve(process.env.BASE_PATH, '.env') });
+if (result.error) {
+  throw result.error;
+}
 
 
 /**
@@ -210,6 +215,7 @@ if (HELMET_HSTS) {
 
 /**
  * @name notFound
+ * @function notFound
  * @description middleware to handle un matched routes 
  * @param  {Request}   request  valid express http request
  * @param  {Response}   response valid express http response
@@ -229,6 +235,7 @@ app.notFound = function notFound(request, response, next) {
 
 /**
  * @name handleError
+ * @function handleError
  * @param  {Request}   request  valid express http request
  * @param  {Response}   response valid express http response
  * @param  {Function} next middlware to pass control into
@@ -263,6 +270,7 @@ app.errorHandler = function errorHandler(error, request, response, next) {
 
 /**
  * @name handleNotFound
+ * @function handleNotFound
  * @description handle non matched routes 
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
@@ -276,6 +284,7 @@ app.handleNotFound = function handleNotFound(notFound) {
 
 /**
  * @name handleErrors
+ * @function handleErrors
  * @description handle errors
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
@@ -291,6 +300,7 @@ app.handleErrors = function handleError(errorHandler) {
 
 /**
  * @name mount
+ * @function mount
  * @description mount router(s) into application
  * @param {routesr} routers set of routers or paths to load
  * @author lally elias <lallyelias87@mail.com>
@@ -303,8 +313,58 @@ app.mount = function mount(...routers) {
 };
 
 
+/**
+ * @name start
+ * @function start
+ * @description start express app
+ * @param {Number} [port] valid port
+ * @param {Function} [listener] callback to invoke on listen
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ * @public
+ * @example
+ * 
+ * const app = require('@lykmapipo/express-common');
+ *
+ * ...initializations
+ *
+ * app
+ *   .start( function onStart(error, env) {
+ *     ...
+ *   })
+ *   .on('error', function onError(error) {
+ *     ...
+ *   });
+ *   
+ */
+app.start = function start(port, listener) {
+
+  //ensure port
+  let _port = (process.env.PORT || 5000);
+  _port = _.isNumber(port) ? port : _port;
+
+  //ensure listener
+  const _listener = function () {
+    const cb = _.isFunction(port) ? port : listener;
+    cb && cb(null, process.env);
+  }
+
+  //handle notFound & error
+  app.handleNotFound();
+  app.handleErrors();
+
+  app.listen(_port, _listener);
+
+  //return app for chaining
+  return app;
+
+};
+
+
 //TODO swagger.json (definition)
 //TODO swagger ui (explore)
+
 
 /**
  * export
