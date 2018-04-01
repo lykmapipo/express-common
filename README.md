@@ -36,16 +36,14 @@ $ npm install --save @lykmapipo/express-common
 //dependencies
 const path = require('path');
 const app = require('@lykmapipo/express-common');
+const Router = app.Router;
 
-//define router
-const router = new app.Router({
+const router = new Router({
   version: '1.0.0'
 });
 router.get('/users', ...);
 
-//mount routers
 app.mount(router);
-
 app.start();
 
 ```
