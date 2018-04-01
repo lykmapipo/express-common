@@ -42,20 +42,16 @@ const router = new app.Router({
   version: '1.0.0'
 });
 router.get('/users', ...);
-router.post('/users', ...);
-router.get('/users/:id', ...);
-router.put('/users/:id', ...);
-router.patch('/users/:id', ...);
-router.delete('/users/:id', ...);
 
 //mount routers
 app.mount(router);
 
-//start app
-app.start(function(error, env) {
-  ...
-});
+app.start();
 
+```
+
+```curl
+curl http://0.0.0.0:5000/v1.0.0/users
 ```
 
 
