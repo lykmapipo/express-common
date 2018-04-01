@@ -48,11 +48,7 @@ process.env.BASE_PATH =
  * load configuration from .env file from BASE_PATH
  * @see  {@link https://github.com/motdotla/dotenv}
  */
-const result =
-  dotenv.load({ path: path.resolve(process.env.BASE_PATH, '.env') });
-if (result.error) {
-  throw result.error;
-}
+dotenv.load({ path: path.resolve(process.env.BASE_PATH, '.env') });
 
 
 /**
@@ -348,7 +344,7 @@ app.start = function start(port, listener) {
   const _listener = function () {
     const cb = _.isFunction(port) ? port : listener;
     cb && cb(null, process.env);
-  }
+  };
 
   //handle notFound & error
   app.handleNotFound();
