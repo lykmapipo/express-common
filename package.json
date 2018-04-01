@@ -12,7 +12,13 @@
     "sinatra",
     "rest",
     "restify",
-    "api"
+    "api",
+    "helmet",
+    "cors",
+    "compression",
+    "body-parser",
+    "morgan",
+    "dotenv"
   ],
   "main": "index.js",
   "scripts": {
