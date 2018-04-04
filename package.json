@@ -1,6 +1,6 @@
 {
   "name": "@lykmapipo/express-common",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "minimal express app configuration",
   "keywords": [
     "lykmapipo",
@@ -18,7 +18,8 @@
     "compression",
     "body-parser",
     "morgan",
-    "dotenv"
+    "dotenv",
+    "mquery"
   ],
   "main": "index.js",
   "scripts": {
@@ -66,6 +67,7 @@
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "express-mquery": "^1.0.1",
     "helmet": "^3.12.0",
     "lodash": "^4.17.5",
     "method-override": "^2.3.10",

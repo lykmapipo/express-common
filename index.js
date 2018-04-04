@@ -33,6 +33,7 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const helmet = require('helmet');
+const mquery = require('express-mquery');
 const statuses = require('statuses');
 
 
@@ -207,6 +208,18 @@ if (HELMET_HSTS) {
 } else {
   app.use(helmet({ hsts: false }));
 }
+
+
+/**
+ * use express-mquery middleware
+ * @see {@link https://github.com/lykmapipo/express-mquery}
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.1.0
+ */
+const MQUERY_LIMIT = process.env.MQUERY_LIMIT || 10;
+const MQUERY_MAX_LIMIT = process.env.MQUERY_MAX_LIMIT || 50;
+app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 
 
 /**

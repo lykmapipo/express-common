@@ -227,6 +227,44 @@ describe('app', function () {
   });
 
 
+  describe('mquery', function () {
+
+    app.get('/mquery', function (request, response) {
+      response.json(request.mquery);
+    });
+
+    it('should set `mquery` middleware', function (done) {
+      const query = {
+        filter: { age: { $gte: 12 } },
+        paginate: { limit: 20, skip: 0, page: 1 },
+        populate: [{ path: 'customer' }],
+        select: { name: 1 },
+        sort: { name: 1, email: -1 }
+      };
+      supertest(app)
+        .get(
+          '/mquery?fields=name&include=customer&filter[age][$gte]=12&sort[name]=1&sort[email]=-1&page=1&limit=20'
+        )
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function (error, response) {
+          expect(error).to.not.exist;
+          expect(response).to.exist;
+          const mquery = response.body;
+          expect(mquery).to.exist;
+          expect(mquery.select).to.exist;
+          expect(mquery.paginate).to.exist;
+          expect(mquery.populate).to.exist;
+          expect(mquery.select).to.exist;
+          expect(mquery.sort).to.exist;
+          expect(mquery).to.eql(query);
+          done(error, response);
+        });
+    });
+
+  });
+
+
   describe('mount', function () {
 
     it('should be able to mount router into app', function () {
