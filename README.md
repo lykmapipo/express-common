@@ -17,6 +17,7 @@ It use below packages:
 - [morgan](https://github.com/expressjs/morgan)
 - [@lykmapipo/express-request-extra](https://github.com/lykmapipo/express-request-extra)
 - [@lykmapipo/express-router-extra](https://github.com/lykmapipo/express-router-extra)
+- [express-mquery](https://github.com/lykmapipo/express-mquery)
 
 *Note: It highly advice to use TLS*
 
