@@ -17,16 +17,14 @@
  * server.listen(3000);
  */
 
-//TODO implement debug
 
-
-//dependencies
+/* dependencies */
 const path = require('path');
 const _ = require('lodash');
+const env = require('@lykmapipo/env');
 const express = require('@lykmapipo/express-request-extra');
 const Router = require('@lykmapipo/express-router-extra').Router;
 const doMount = require('@lykmapipo/express-router-extra').mount;
-const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
 const compression = require('compression');
@@ -35,21 +33,7 @@ const methodOverride = require('method-override');
 const helmet = require('helmet');
 const mquery = require('express-mquery');
 const statuses = require('statuses');
-
-
-/**
- * ensure process BASE_PATH
- * @default process.cwd()
- */
-process.env.BASE_PATH =
-  path.resolve(process.env.BASE_PATH || process.cwd());
-
-
-/**
- * load configuration from .env file from BASE_PATH
- * @see  {@link https://github.com/motdotla/dotenv}
- */
-dotenv.load({ path: path.resolve(process.env.BASE_PATH, '.env') });
+const { getString, getBoolean, getNumber } = env;
 
 
 /**
@@ -109,9 +93,9 @@ app.set('port', process.env.PORT || 5000);
  * @since  0.1.0
  * @version 0.1.0
  */
-const LOG_ENABLED = process.env.LOG_ENABLED;
+const LOG_ENABLED = getBoolean('LOG_ENABLED', false);
 if (LOG_ENABLED) {
-  const LOG_FORMAT = process.env.LOG_FORMAT;
+  const LOG_FORMAT = getString('LOG_FORMAT', 'combined');
   app.use(morgan(LOG_FORMAT));
 }
 
@@ -144,9 +128,9 @@ app.use(compression());
  * @since  0.1.0
  * @version 0.1.0
  */
-const SERVE_STATIC = process.env.SERVE_STATIC;
+const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
 if (SERVE_STATIC) {
-  const STATIC_PATH = process.env.SERVE_STATIC_PATH || 'public';
+  const STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
   app.use(express.static(path.resolve(process.cwd(), STATIC_PATH)));
 }
 
@@ -159,7 +143,7 @@ if (SERVE_STATIC) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const BODY_PARSER_LIMIT = (process.env.BODY_PARSER_LIMIT || '2mb');
+const BODY_PARSER_LIMIT = getString('BODY_PARSER_LIMIT', '2mb');
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: BODY_PARSER_LIMIT
@@ -175,7 +159,7 @@ app.use(bodyParser.urlencoded({
  * @version 0.1.0
  */
 const BODY_PARSER_JSON_TYPE =
-  (process.env.BODY_PARSER_JSON_TYPE || 'application/json');
+  getString('BODY_PARSER_JSON_TYPE', 'application/json');
 app.use(bodyParser.json({
   type: BODY_PARSER_JSON_TYPE,
   limit: BODY_PARSER_LIMIT
@@ -202,7 +186,7 @@ app.use(methodOverride('_method')); // query param
  * @since  0.1.0
  * @version 0.1.0
  */
-const HELMET_HSTS = process.env.HELMET_HSTS;
+const HELMET_HSTS = getBoolean('HELMET_HSTS', false);
 if (HELMET_HSTS) {
   app.use(helmet());
 } else {
@@ -217,8 +201,8 @@ if (HELMET_HSTS) {
  * @since  0.1.0
  * @version 0.1.0
  */
-const MQUERY_LIMIT = process.env.MQUERY_LIMIT || 10;
-const MQUERY_MAX_LIMIT = process.env.MQUERY_MAX_LIMIT || 50;
+const MQUERY_LIMIT = getNumber('MQUERY_LIMIT', 10);
+const MQUERY_MAX_LIMIT = getNumber('MQUERY_MAX_LIMIT', 50);
 app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 
 
