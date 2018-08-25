@@ -30,6 +30,7 @@ const cors = require('cors');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
 const mquery = require('express-mquery');
 const statuses = require('statuses');
@@ -130,16 +131,31 @@ app.use(compression());
 
 /**
  * use express.static middleware
- * @see  {@link http://expressjs.com/en/starter/static-files.html}
+ * @see {@link http://expressjs.com/en/starter/static-files.html}
  * @see {@link http://expressjs.com/en/4x/api.html#express.static}
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
  */
 const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
+let STATIC_PATH;
 if (SERVE_STATIC) {
-  const STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
-  app.use(express.static(path.resolve(process.cwd(), STATIC_PATH)));
+  STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
+  app.use(express.static(path.resolve(env('BASE_PATH'), STATIC_PATH)));
+}
+
+
+/**
+ * use serve favicon middleware
+ * @see {@link https://github.com/expressjs/serve-favicon}
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.1.0
+ * @version 0.9.0
+ */
+const SERVE_FAVICON = getBoolean('SERVE_FAVICON', false);
+if (SERVE_FAVICON) {
+  const FAVICON_PATH = path.join(STATIC_PATH, 'favicon.ico');
+  app.use(serveFavicon(FAVICON_PATH));
 }
 
 

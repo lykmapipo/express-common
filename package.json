@@ -1,6 +1,6 @@
 {
   "name": "@lykmapipo/express-common",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "minimal express app configuration",
   "keywords": [
     "lykmapipo",
@@ -72,6 +72,7 @@
     "lodash": "^4.17.10",
     "method-override": "^3.0.0",
     "morgan": "^1.9.0",
+    "serve-favicon": "^2.5.0",
     "statuses": "^1.5.0"
   },
   "engines": {
