@@ -1,6 +1,6 @@
 {
   "name": "@lykmapipo/express-common",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "minimal express app configuration",
   "keywords": [
     "lykmapipo",
@@ -24,7 +24,7 @@
   "main": "index.js",
   "scripts": {
     "test": "grunt test",
-    "dev": "BASE_PATH=./examples nodemon examples/app.js"
+    "dev": "BASE_PATH=./examples node examples/app.js"
   },
   "repository": {
     "type": "git",
@@ -55,11 +55,10 @@
     "grunt-mocha-test": "^0.13.3",
     "jshint-stylish": "^2.2.1",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.3",
     "supertest": "^3.1.0"
   },
   "dependencies": {
-    "@lykmapipo/env": "^0.2.0",
+    "@lykmapipo/env": "^0.2.1",
     "@lykmapipo/express-request-extra": "^0.1.0",
     "@lykmapipo/express-router-extra": "^0.2.0",
     "async": "^2.6.1",

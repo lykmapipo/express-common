@@ -141,7 +141,8 @@ const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
 let STATIC_PATH;
 if (SERVE_STATIC) {
   STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
-  app.use(express.static(path.resolve(env('BASE_PATH'), STATIC_PATH)));
+  STATIC_PATH = path.resolve(env('BASE_PATH'), STATIC_PATH);
+  app.use(express.static(STATIC_PATH));
 }
 
 
@@ -154,7 +155,7 @@ if (SERVE_STATIC) {
  */
 const SERVE_FAVICON = getBoolean('SERVE_FAVICON', false);
 if (SERVE_FAVICON) {
-  const FAVICON_PATH = path.join(STATIC_PATH, 'favicon.ico');
+  const FAVICON_PATH = path.resolve(STATIC_PATH, 'favicon.ico');
   app.use(serveFavicon(FAVICON_PATH));
 }
 
