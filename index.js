@@ -40,7 +40,14 @@ const { getString, getBoolean, getNumber } = env;
  * ensure process runtime environment
  * @default development
  */
-process.env.NODE_ENV = (process.env.NODE_ENV || 'development');
+process.env.NODE_ENV = env('NODE_ENV', 'development');
+
+
+/**
+ * ensure process BASE_PATH
+ * @default process.cwd()
+ */
+process.env.BASE_PATH = env('BASE_PATH', process.cwd());
 
 
 /**
@@ -74,7 +81,7 @@ app.Router = Router;
  * @since  0.1.0
  * @version 0.1.0
  */
-app.set('env', process.env.NODE_ENV);
+app.set('env', env('NODE_ENV'));
 
 
 /**
@@ -83,7 +90,8 @@ app.set('env', process.env.NODE_ENV);
  * @since  0.1.0
  * @version 0.1.0
  */
-app.set('port', process.env.PORT || 5000);
+const PORT = getNumber('PORT', 5000);
+app.set('port', PORT);
 
 
 /**
@@ -243,7 +251,7 @@ app.errorHandler = function errorHandler(error, request, response, next) {
   //prepare error payload
 
   //environment
-  const isProduction = (process.env.NODE_ENV === 'production');
+  const { isProduction } = env;
 
   //error status
   const status = (error.status || error.statusCode || 500);
@@ -381,7 +389,7 @@ app.mount = function mount(...routers) {
 app.start = function start(port, listener) {
 
   //ensure port
-  let _port = (process.env.PORT || 5000);
+  let _port = PORT;
   _port = _.isNumber(port) ? port : _port;
 
   //ensure listener
