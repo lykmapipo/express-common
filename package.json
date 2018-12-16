@@ -1,6 +1,6 @@
 {
   "name": "@lykmapipo/express-common",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "minimal express app configuration",
   "keywords": [
     "lykmapipo",
@@ -47,7 +47,6 @@
     }
   ],
   "devDependencies": {
-    "async": "^2.6.1",
     "chai": "^4.2.0",
     "faker": "^4.1.0",
     "grunt": "^1.0.3",
@@ -55,28 +54,25 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-mocha-test": "^0.13.3",
     "jshint-stylish": "^2.2.1",
-    "lodash": "^4.17.11",
     "mocha": "^5.2.0",
     "supertest": "^3.3.0"
   },
-  "peerDependencies": {
-    "async": "^2.6.1",
-    "lodash": "^4.17.11"
-  },
   "dependencies": {
-    "@lykmapipo/env": "^0.3.2",
-    "@lykmapipo/express-request-extra": "^0.1.1",
-    "@lykmapipo/express-router-extra": "^0.2.1",
-    "body-parser": "^1.18.3",
-    "compression": "^1.7.3",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "express-mquery": "^1.0.4",
-    "helmet": "^3.15.0",
-    "method-override": "^3.0.0",
-    "morgan": "^1.9.1",
-    "serve-favicon": "^2.5.0",
-    "statuses": "^1.5.0"
+    "@lykmapipo/env": ">=0.3.2",
+    "@lykmapipo/express-request-extra": ">=0.1.1",
+    "@lykmapipo/express-router-extra": ">=0.2.1",
+    "async": ">=2.6.1",
+    "body-parser": ">=1.18.3",
+    "compression": ">=1.7.3",
+    "cors": ">=2.8.5",
+    "express": ">=4.16.4",
+    "express-mquery": ">=1.0.4",
+    "helmet": ">=3.15.0",
+    "lodash": ">=4.17.11",
+    "method-override": ">=3.0.0",
+    "morgan": ">=1.9.1",
+    "serve-favicon": ">=2.5.0",
+    "statuses": ">=1.5.0"
   },
   "engines": {
     "node": ">=8.6.0",
