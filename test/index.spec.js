@@ -19,22 +19,22 @@ const supertest = require('supertest');
 const expect = require('chai').expect;
 const app = require(path.join(__dirname, '..'));
 
-describe('app', function () {
+describe('app', () => {
 
-  it('should an instance of event emitter', function () {
+  it('should an instance of event emitter', () => {
     expect(app).to.exist;
     expect(app.constructor.name).to.be.equal('EventEmitter');
   });
 
-  describe('env', function () {
+  describe('env', () => {
 
-    it('should have default runtime environment', function () {
+    it('should have default runtime environment', () => {
       const env = app.get('env');
       expect(env).to.exist;
       expect(env).to.be.equal('test');
     });
 
-    it('should be able to change runtime environment', function () {
+    it('should be able to change runtime environment', () => {
       //remember
       const last = app.get('env');
 
@@ -51,13 +51,13 @@ describe('app', function () {
   });
 
 
-  describe('cors', function () {
+  describe('cors', () => {
 
-    app.get('/cors', function (request, response) {
+    app.get('/cors', (request, response) => {
       response.json({});
     });
 
-    it('should set `cors` middleware', function (done) {
+    it('should set `cors` middleware', (done) => {
       supertest(app)
         .get('/cors')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -69,13 +69,13 @@ describe('app', function () {
 
   });
 
-  describe('compression', function () {
+  describe('compression', () => {
 
-    app.get('/compressions', function (request, response) {
+    app.get('/compressions', (request, response) => {
       response.json({});
     });
 
-    it('should be able to serve static content', function (done) {
+    it('should be able to serve static content', (done) => {
       supertest(app)
         .get('/compressions')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -88,9 +88,9 @@ describe('app', function () {
 
   });
 
-  describe('serve static', function () {
+  describe('serve static', () => {
 
-    it('should be able to serve static content', function (done) {
+    it('should be able to serve static content', (done) => {
       supertest(app)
         .get('/sample.png')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -102,13 +102,13 @@ describe('app', function () {
 
   });
 
-  describe('body parser', function () {
+  describe('body parser', () => {
 
-    app.post('/parsers', function (request, response) {
+    app.post('/parsers', (request, response) => {
       response.json(request.body);
     });
 
-    it('should be able to parse json bodies', function (done) {
+    it('should be able to parse json bodies', (done) => {
       const body = {
         point: 4
       };
@@ -129,7 +129,7 @@ describe('app', function () {
     });
 
 
-    it('should be able to parse url-encoded bodies', function (done) {
+    it('should be able to parse url-encoded bodies', (done) => {
       const body = {
         grade: 'A'
       };
@@ -151,14 +151,14 @@ describe('app', function () {
 
   });
 
-  describe('overrides', function () {
+  describe('overrides', () => {
 
-    app.all('/overrides', function (request, response) {
+    app.all('/overrides', (request, response) => {
       response.set('X-Got-Method', request.method);
       response.json(request.body);
     });
 
-    it('should set `overrides` middleware', function (done) {
+    it('should set `overrides` middleware', (done) => {
       supertest(app)
         .get('/overrides')
         .expect(200)
@@ -166,7 +166,7 @@ describe('app', function () {
         .end(done);
     });
 
-    it('should set `overrides` middleware', function (done) {
+    it('should set `overrides` middleware', (done) => {
       supertest(app)
         .post('/overrides')
         .set('X-HTTP-Method', 'DELETE')
@@ -175,7 +175,7 @@ describe('app', function () {
         .end(done);
     });
 
-    it('should set `overrides` middleware', function (done) {
+    it('should set `overrides` middleware', (done) => {
       supertest(app)
         .post('/overrides')
         .set('X-HTTP-Method-Override', 'DELETE')
@@ -184,7 +184,7 @@ describe('app', function () {
         .end(done);
     });
 
-    it('should set `overrides` middleware', function (done) {
+    it('should set `overrides` middleware', (done) => {
       supertest(app)
         .post('/overrides')
         .set('X-Method-Override', 'DELETE')
@@ -193,7 +193,7 @@ describe('app', function () {
         .end(done);
     });
 
-    it('should set `overrides` middleware', function (done) {
+    it('should set `overrides` middleware', (done) => {
       supertest(app)
         .post('/overrides?_method=DELETE')
         .expect(200)
@@ -204,13 +204,13 @@ describe('app', function () {
   });
 
 
-  describe('helmet', function () {
+  describe('helmet', () => {
 
-    app.get('/helmets', function (request, response) {
+    app.get('/helmets', (request, response) => {
       response.json({});
     });
 
-    it('should set `helmet` middleware', function (done) {
+    it('should set `helmet` middleware', (done) => {
       supertest(app)
         .get('/helmets')
         .expect(200)
@@ -227,13 +227,13 @@ describe('app', function () {
   });
 
 
-  describe('mquery', function () {
+  describe('mquery', () => {
 
-    app.get('/mquery', function (request, response) {
+    app.get('/mquery', (request, response) => {
       response.json(request.mquery);
     });
 
-    it('should set `mquery` middleware', function (done) {
+    it('should set `mquery` middleware', (done) => {
       const query = {
         filter: { age: { $gte: 12 } },
         paginate: { limit: 20, skip: 0, page: 1 },
@@ -264,10 +264,27 @@ describe('app', function () {
 
   });
 
+  describe('respond', () => {
 
-  describe('mount', function () {
+    app.get('/respond', (request, response) => {
+      response.ok({});
+    });
 
-    it('should be able to mount router into app', function () {
+    it('should set `respond` middleware', (done) => {
+      supertest(app)
+        .get('/cors')
+        .set('Accept-Encoding', 'gzip, deflate, br')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .expect('Access-Control-Allow-Origin', '*')
+        .end(done);
+    });
+
+  });
+
+  describe('mount', () => {
+
+    it('should be able to mount router into app', () => {
 
       //initialize & mount
       const router = new app.Router();
@@ -286,7 +303,7 @@ describe('app', function () {
 
     });
 
-    it('should be able to mount router only once into app', function () {
+    it('should be able to mount router only once into app', () => {
 
       //initialize & mount
       const router = new app.Router();
@@ -306,7 +323,7 @@ describe('app', function () {
 
     });
 
-    it('should be able to mount routers into app', function () {
+    it('should be able to mount routers into app', () => {
 
       //initialize & mount
       const routerA = new app.Router();
@@ -335,7 +352,7 @@ describe('app', function () {
 
     });
 
-    it('should be able to mount router from paths into app', function () {
+    it('should be able to mount router from paths into app', () => {
 
       //initialize & mount
       process.env.CWD =

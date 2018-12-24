@@ -22,6 +22,7 @@
 const path = require('path');
 const _ = require('lodash');
 const env = require('@lykmapipo/env');
+const statuses = require('statuses');
 const express = require('@lykmapipo/express-request-extra');
 const Router = require('@lykmapipo/express-router-extra').Router;
 const doMount = require('@lykmapipo/express-router-extra').mount;
@@ -33,7 +34,7 @@ const methodOverride = require('method-override');
 const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
 const mquery = require('express-mquery');
-const statuses = require('statuses');
+const respond = require('express-respond');
 const { getString, getBoolean, getNumber } = env;
 
 
@@ -229,6 +230,16 @@ if (HELMET_HSTS) {
 const MQUERY_LIMIT = getNumber('MQUERY_LIMIT', 10);
 const MQUERY_MAX_LIMIT = getNumber('MQUERY_MAX_LIMIT', 50);
 app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
+
+
+/**
+ * use express-respond middleware
+ * @see {@link https://github.com/lykmapipo/express-respond}
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.10.0
+ * @version 0.1.0
+ */
+app.use(respond);
 
 
 /**
