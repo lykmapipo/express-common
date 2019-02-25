@@ -1,3 +1,9 @@
+#### 0.12.0 (2019-02-25)
+
+##### New Features
+
+*  disable http request log on test ([9ef2a0eb](https://github.com/lykmapipo/express-common/commit/9ef2a0ebaaa0b02250aa9c62b65c87966230b90e))
+
 #### 0.11.0 (2019-02-25)
 
 ##### New Features
