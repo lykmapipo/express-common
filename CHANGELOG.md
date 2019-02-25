@@ -1,3 +1,9 @@
+#### 0.11.0 (2019-02-25)
+
+##### New Features
+
+*  add testApp to api testing ([594b24ea](https://github.com/lykmapipo/express-common/commit/594b24ead5cf5eca6b11cde8322009cff797051e))
+
 #### 0.10.2 (2019-02-13)
 
 ##### Chores
