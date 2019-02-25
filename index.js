@@ -25,7 +25,8 @@ const {
   getString,
   getBoolean,
   getNumber,
-  isProduction
+  isProduction,
+  isTest
 } = require('@lykmapipo/env');
 const statuses = require('statuses');
 const express = require('@lykmapipo/express-request-extra');
@@ -107,7 +108,7 @@ app.set('port', PORT);
  * @since  0.1.0
  * @version 0.1.0
  */
-const LOG_ENABLED = getBoolean('LOG_ENABLED', false);
+const LOG_ENABLED = getBoolean('LOG_ENABLED', false) && !isTest();
 if (LOG_ENABLED) {
   const LOG_FORMAT = getString('LOG_FORMAT', 'combined');
   app.use(morgan(LOG_FORMAT));
