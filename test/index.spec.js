@@ -26,6 +26,12 @@ describe('app', () => {
     expect(app.constructor.name).to.be.equal('EventEmitter');
   });
 
+  it('should expose test app', () => {
+    const { testApp } = app;
+    expect(testApp).to.exist;
+    expect(testApp.constructor.name).to.be.equal('EventEmitter');
+  });
+
   describe('env', () => {
 
     it('should have default runtime environment', () => {

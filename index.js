@@ -21,7 +21,12 @@
 /* dependencies */
 const path = require('path');
 const _ = require('lodash');
-const env = require('@lykmapipo/env');
+const {
+  getString,
+  getBoolean,
+  getNumber,
+  isProduction
+} = require('@lykmapipo/env');
 const statuses = require('statuses');
 const express = require('@lykmapipo/express-request-extra');
 const Router = require('@lykmapipo/express-router-extra').Router;
@@ -35,21 +40,20 @@ const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
 const mquery = require('express-mquery');
 const respond = require('express-respond');
-const { getString, getBoolean, getNumber } = env;
 
 
 /**
  * ensure process runtime environment
  * @default development
  */
-process.env.NODE_ENV = env('NODE_ENV', 'development');
+process.env.NODE_ENV = getString('NODE_ENV', 'development');
 
 
 /**
  * ensure process BASE_PATH
  * @default process.cwd()
  */
-process.env.BASE_PATH = env('BASE_PATH', process.cwd());
+process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
 
 
 /**
@@ -83,7 +87,7 @@ app.Router = Router;
  * @since  0.1.0
  * @version 0.1.0
  */
-app.set('env', env('NODE_ENV'));
+app.set('env', getString('NODE_ENV'));
 
 
 /**
@@ -142,7 +146,7 @@ const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
 let STATIC_PATH;
 if (SERVE_STATIC) {
   STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
-  STATIC_PATH = path.resolve(env('BASE_PATH'), STATIC_PATH);
+  STATIC_PATH = path.resolve(getString('BASE_PATH'), STATIC_PATH);
   app.use(express.static(STATIC_PATH));
 }
 
@@ -278,9 +282,6 @@ app.errorHandler = function errorHandler(error, request, response, next) {
 
   //prepare error payload
 
-  //environment
-  const { isProduction } = env;
-
   //error status
   const status = (error.status || error.statusCode || 500);
 
@@ -314,7 +315,7 @@ app.errorHandler = function errorHandler(error, request, response, next) {
   const errors = (error.errors);
 
   //error stack
-  const stack = (isProduction ? undefined : error.stack);
+  const stack = (isProduction() ? undefined : error.stack);
 
   //error payload
   const payload = {
@@ -438,8 +439,32 @@ app.start = function start(port, listener) {
 };
 
 
-//TODO swagger.json (definition)
-//TODO swagger ui (explore)
+/**
+ * @name test
+ * @function test
+ * @description express app used for api testing
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.11.0
+ * @version 0.1.0
+ * @public
+ * @example
+ * const { testApp } = require('@lykmapipo/express-common');
+ * request(testApp)
+ *   .get(`/v1/users`)
+ *   .set('Accept', /json/)
+ *   .expect('Content-Type', /json/)
+ *   .expect(200).end((error, response) => { ... });
+ */
+Object.defineProperty(app, 'testApp', {
+  get: function getTestApp() {
+    // handle notFound
+    app.handleNotFound();
+    // handle error
+    app.handleErrors();
+    // return express app
+    return app;
+  }
+});
 
 
 /**
