@@ -1,3 +1,9 @@
+#### 0.12.1 (2019-03-04)
+
+##### Chores
+
+*  force latest dependencies ([c3d9b8c4](https://github.com/lykmapipo/express-common/commit/c3d9b8c49ebdea69aee6e5648b75509977727c5d))
+
 #### 0.12.0 (2019-02-25)
 
 ##### New Features
