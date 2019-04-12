@@ -278,12 +278,32 @@ describe('app', () => {
 
     it('should set `respond` middleware', (done) => {
       supertest(app)
-        .get('/cors')
+        .get('/respond')
         .set('Accept-Encoding', 'gzip, deflate, br')
         .expect(200)
         .expect('Content-Type', /json/)
         .expect('Access-Control-Allow-Origin', '*')
         .end(done);
+    });
+
+    app.get('/respond-error', (request, response) => {
+      response.error(new Error('Server Error'));
+    });
+
+    it('should set `respond` middleware', (done) => {
+      supertest(app)
+        .get('/respond-error')
+        .set('Accept-Encoding', 'gzip, deflate, br')
+        .expect(500)
+        .expect('Content-Type', /json/)
+        .expect('Access-Control-Allow-Origin', '*')
+        .end((error, { body }) => {
+          expect(body.status).to.exist;
+          expect(body.code).to.exist;
+          expect(body.message).to.exist;
+          expect(body.description).to.exist;
+          done();
+        });
     });
 
   });
