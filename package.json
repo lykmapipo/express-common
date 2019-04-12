@@ -58,6 +58,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@lykmapipo/common": ">=0.16.0",
     "@lykmapipo/env": ">=0.7.3",
     "@lykmapipo/express-request-extra": ">=0.1.3",
     "@lykmapipo/express-router-extra": ">=0.3.1",

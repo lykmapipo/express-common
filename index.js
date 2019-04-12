@@ -25,10 +25,8 @@ const {
   getString,
   getBoolean,
   getNumber,
-  isProduction,
   isTest
 } = require('@lykmapipo/env');
-const statuses = require('statuses');
 const express = require('@lykmapipo/express-request-extra');
 const Router = require('@lykmapipo/express-router-extra').Router;
 const doMount = require('@lykmapipo/express-router-extra').mount;
@@ -275,71 +273,11 @@ app.notFound = function notFound(request, response, next) {
  * @param  {Function} next middlware to pass control into
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
- * @version 0.1.0
+ * @version 0.2.0
  * @see  {@link http://jsonapi.org/examples/#error-objects}
  */
 app.errorHandler = function errorHandler(error, request, response, next) {
-  //TODO support error dictionary
-
-  //prepare error payload
-
-  //error status
-  const status = (error.status || error.statusCode || 500);
-
-  //error code
-  const code = (error.errorCode || error.code || status);
-
-  //error name
-  const name = (error.name || error.title || error.type);
-
-  //error message
-  const message =
-    (error.message || error._message || statuses[status]);
-
-  //support apigee error reporting style
-  //https://apigee.com/about/blog/technology/restful-api-design-what-about-errors
-  //http://blog.restcase.com/rest-api-error-codes-101/
-  const developerMessage = (error.developerMessage || message);
-  const userMessage = (error.userMessage || message);
-  const moreInfo = error.moreInfo;
-
-  //support OAuth v2 erro style
-  //https://tools.ietf.org/html/rfc6749#page-71
-  const err = (error.error || name || code);
-  const description =
-    (error.description || error.errorDescription ||
-      userMessage || developerMessage);
-  const uri = (_.get(error, 'error_uri') || error.errorUri ||
-    error.uri || moreInfo);
-
-  //error bag
-  const errors = (error.errors);
-
-  //error stack
-  const stack = (isProduction() ? undefined : error.stack);
-
-  //error payload
-  const payload = {
-    status: status,
-    code: code,
-    name: name,
-    message: message,
-    errors: errors,
-    stack: stack,
-    developerMessage: developerMessage,
-    userMessage: userMessage,
-    moreInfo: moreInfo,
-    error: err,
-    'error_description': description,
-    'error_uri': uri
-  };
-
-  //TODO log error
-
-  //reply with error
-  response.status(status);
-  response.json(payload);
-
+  response.error(error);
 };
 
 /*jshint unused:true */
