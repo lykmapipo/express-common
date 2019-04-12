@@ -1,3 +1,13 @@
+#### 0.13.0 (2019-04-12)
+
+##### Refactors
+
+*  use response error method shortcut ([41924602](https://github.com/lykmapipo/express-common/commit/41924602874e88aa479eac1cea2844e3693706e6))
+
+##### Tests
+
+*  assert error response fields ([89a44f29](https://github.com/lykmapipo/express-common/commit/89a44f297aa74ebde17dcf38fdd75d27c65aa32f))
+
 #### 0.12.3 (2019-04-12)
 
 ##### Chores
