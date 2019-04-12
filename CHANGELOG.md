@@ -1,3 +1,10 @@
+#### 0.12.3 (2019-04-12)
+
+##### Chores
+
+*  use latest node on travis ([53793e63](https://github.com/lykmapipo/express-common/commit/53793e63f97b8eb8b21c4158052383eef68d23cd))
+*  force latest dependencies ([fde4c2a2](https://github.com/lykmapipo/express-common/commit/fde4c2a25a8b21b2f2fd1b45858f49bf22300a5a))
+
 #### 0.12.2 (2019-04-01)
 
 ##### Chores
