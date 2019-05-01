@@ -1,3 +1,10 @@
+#### 0.13.1 (2019-05-01)
+
+##### Chores
+
+* **.npmrc:**  prevent npm version to commit and tag version ([e9520c7f](https://github.com/lykmapipo/express-common/commit/e9520c7fff240e67c3de8865afe1083eadf514ff))
+* **deps:**  force latest version & audit fix ([8cb0b70c](https://github.com/lykmapipo/express-common/commit/8cb0b70c5cc1c20dadce40dc1cd3b72d9336c389))
+
 #### 0.13.0 (2019-04-12)
 
 ##### Refactors
