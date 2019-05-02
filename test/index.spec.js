@@ -232,6 +232,28 @@ describe('app', () => {
 
   });
 
+  describe('request-id', () => {
+
+    app.get('/request-id', (request, response) => {
+      expect(request.headers['x-correlation-id']).to.exist;
+      expect(request.headers['x-request-id']).to.exist;
+      response.json({});
+    });
+
+    it('should set `request-id` middleware', (done) => {
+      supertest(app)
+        .get('/request-id')
+        .expect(200)
+        .end((error, response) => {
+          expect(response.headers['x-correlation-id']).to.exist;
+          expect(response.headers['x-request-id']).to.exist;
+          expect(response.headers['x-request-id'])
+            .to.be.equal(response.headers['x-correlation-id']);
+          done(error, response);
+        });
+    });
+
+  });
 
   describe('mquery', () => {
 

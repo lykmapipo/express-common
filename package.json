@@ -58,7 +58,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
-    "@lykmapipo/common": ">=0.17.1",
+    "@lykmapipo/common": ">=0.17.2",
     "@lykmapipo/env": ">=0.7.4",
     "@lykmapipo/express-request-extra": ">=0.1.4",
     "@lykmapipo/express-router-extra": ">=0.3.2",
@@ -74,7 +74,8 @@
     "method-override": ">=3.0.0",
     "morgan": ">=1.9.1",
     "serve-favicon": ">=2.5.0",
-    "statuses": ">=1.5.0"
+    "statuses": ">=1.5.0",
+    "uuid": ">=3.3.2"
   },
   "engines": {
     "node": ">=8.6.0",

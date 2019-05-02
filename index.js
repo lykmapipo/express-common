@@ -21,6 +21,7 @@
 /* dependencies */
 const path = require('path');
 const _ = require('lodash');
+const uuidv1 = require('uuid/v1');
 const {
   getString,
   getBoolean,
@@ -98,6 +99,35 @@ app.set('env', getString('NODE_ENV'));
 const PORT = getNumber('PORT', 5000);
 app.set('port', PORT);
 
+
+/**
+ * ensure request id or correlation id
+ * @see {@link https://github.com/expressjs/morgan}
+ * @author lally elias <lallyelias87@mail.com>
+ * @since  0.14.0
+ * @version 0.1.0
+ */
+app.use(function setCorrelationId(request, response, next) {
+  // obtain passed request or correlation id
+  let correlationId =
+    (request.get('X-Request-Id') || request.get('X-Correlation-Id'));
+
+  // ensure correlationId
+  correlationId = (_.isEmpty(correlationId) ? uuidv1() : correlationId);
+
+  // merge to request headers
+  request.headers = _.merge({}, {
+    'x-correlation-id': correlationId,
+    'x-request-id': correlationId,
+  }, request.headers);
+
+  // set response headers
+  response.set('X-Correlation-Id', correlationId);
+  response.set('X-Request-Id', correlationId);
+
+  // continue
+  next();
+});
 
 /**
  * use morgan request log middleware
