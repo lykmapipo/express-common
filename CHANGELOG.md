@@ -1,3 +1,9 @@
+#### 0.15.0 (2019-05-02)
+
+##### New Features
+
+*  add winston logger stream into morgan ([7e92faf1](https://github.com/lykmapipo/express-common/commit/7e92faf197e82faa74081688c21dd6f2ed90199f))
+
 #### 0.14.0 (2019-05-02)
 
 ##### New Features
