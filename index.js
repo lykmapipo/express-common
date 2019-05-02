@@ -40,6 +40,7 @@ const serveFavicon = require('serve-favicon');
 const helmet = require('helmet');
 const mquery = require('express-mquery');
 const respond = require('express-respond');
+const { stream } = require('@lykmapipo/logger');
 
 
 /**
@@ -139,7 +140,7 @@ app.use(function setCorrelationId(request, response, next) {
 const LOG_ENABLED = getBoolean('LOG_ENABLED', false) && !isTest();
 if (LOG_ENABLED) {
   const LOG_FORMAT = getString('LOG_FORMAT', 'combined');
-  app.use(morgan(LOG_FORMAT));
+  app.use(morgan(LOG_FORMAT, { stream }));
 }
 
 
