@@ -1,3 +1,9 @@
+#### 0.14.0 (2019-05-02)
+
+##### New Features
+
+*  add request id/correlation id on request & response ([01e80521](https://github.com/lykmapipo/express-common/commit/01e80521dbf687f5b20910a6ebef2c9a0e0cf9df))
+
 #### 0.13.1 (2019-05-01)
 
 ##### Chores
