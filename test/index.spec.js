@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import supertest from 'supertest';
 import { expect } from 'chai';
-import app, { mount, testApp } from '../src/index';
+import app, { mount, Router, testApp } from '../src/index';
 
 describe('app', () => {
   it('should an instance of event emitter', () => {
@@ -294,7 +294,7 @@ describe('respond', () => {
 describe('mount', () => {
   it('should be able to mount router into app', () => {
     // initialize & mount
-    const router = new app.Router();
+    const router = new Router();
     router.get('/samples', (req, res) => {
       res.json(req.body);
     });
@@ -312,7 +312,7 @@ describe('mount', () => {
 
   it('should be able to mount router only once into app', () => {
     // initialize & mount
-    const router = new app.Router();
+    const router = new Router();
     router.get('/samples', (req, res) => {
       res.json(req.body);
     });
@@ -331,12 +331,12 @@ describe('mount', () => {
 
   it('should be able to mount routers into app', () => {
     // initialize & mount
-    const routerA = new app.Router();
+    const routerA = new Router();
     routerA.get('/a', (req, res) => {
       res.json(req.body);
     });
 
-    const routerB = new app.Router();
+    const routerB = new Router();
     routerB.get('/b', (req, res) => {
       res.json(req.body);
     });

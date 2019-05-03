@@ -135,6 +135,31 @@ export const errorHandler = (error, request, response, next) => {
 };
 
 /**
+ * @name Router
+ * @function Router
+ * @description factory to create express router with version
+ * @param {Object} [optns] valid express router options plus its version
+ * @param {String|Number} [optns.version] valid router version. default to 1
+ * @return {Router} valid express router
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.15.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const { mount, Router } = require('@lykmapipo/express-common');
+ *
+ * const router = new Router({ version: '1.0.0' });
+ * router.get('/users', (req, res, next) => { ... });
+ * mount(router);
+ * //=> curl --request GET --url /v1/users
+ *
+ */
+export { Router };
+
+/**
  * ensure process runtime environment
  * @default development
  */
@@ -159,15 +184,6 @@ process.env.APP_PATH = path.resolve(
  * initialize express application
  */
 const app = express();
-
-/**
- * @name Router
- * @description factory to create express router with version
- * @param {Object} [optns] valid express router options plus its version
- * @param {String|Number} [optns.version] valid router version. default to 1
- * @return {} [description]
- */
-app.Router = Router;
 
 /**
  * set application environmnent
