@@ -4,7 +4,7 @@ import pkg from './package.json';
 export default [
   {
     input: 'src/index.js',
-    external: [...keys(pkg.dependencies)],
+    external: ['path', 'uuid/v1', ...keys(pkg.dependencies)],
     output: [
       {
         file: pkg.main,
