@@ -2,22 +2,22 @@
  * @name express-common
  * @description minimal express app configuration
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
  * @example
- * const http = require('http');
- * const app = require('@lykmapipo/express-common');
  *
- * ...additional setups
+ * const { start } = require('@lykmapipo/express-common');
+ * start();
+ * //=> app
  *
- * const server = http.createServer(app);
- * server.listen(3000);
  */
 
 /* dependencies */
 import path from 'path';
 import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
+import { mergeObjects } from '@lykmapipo/common';
 import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
 import express from '@lykmapipo/express-request-extra';
 import { mount as doMount, Router } from '@lykmapipo/express-router-extra';
@@ -31,6 +31,77 @@ import helmet from 'helmet';
 import mquery from 'express-mquery';
 import respond from 'express-respond';
 import { stream } from '@lykmapipo/logger';
+
+/**
+ * @function correlationId
+ * @name correlationId
+ * @description http middleware for ensure request id and correlation id are
+ * available on request and response headers
+ * @param {Request} request valid express request object
+ * @param {Response} response valid express response object
+ * @return {Function} next valid express next middlware to pass control to
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.15.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const { correlationId } = require('@lykmapipo/express-common');
+ * app.use(correlationId)
+ *
+ *
+ */
+export const correlationId = (request, response, next) => {
+  // obtain passed request or correlation id
+  let requestId =
+    request.get('X-Request-Id') || request.get('X-Correlation-Id');
+
+  // ensure requestId
+  requestId = _.isEmpty(requestId) ? uuidv1() : requestId;
+
+  // merge to request headers
+  request.headers = mergeObjects(
+    {
+      'x-correlation-id': requestId,
+      'x-request-id': requestId,
+    },
+    request.headers
+  );
+
+  // set response headers
+  response.set('X-Correlation-Id', requestId);
+  response.set('X-Request-Id', requestId);
+
+  // continue
+  next();
+};
+
+/**
+ * @name notFound
+ * @function notFound
+ * @description http middleware to handle un matched routes
+ * @param {Request} request valid express request object
+ * @param {Response} response valid express response object
+ * @return {Function} next valid express next middlware to pass control to
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.15.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const { notFound } = require('@lykmapipo/express-common');
+ * app.use(notFound)
+ *
+ */
+export const notFound = (request, response, next) => {
+  const error = new Error('Not Found');
+  error.status = 404;
+  next(error);
+};
 
 /**
  * ensure process runtime environment
@@ -69,7 +140,6 @@ app.Router = Router;
 
 /**
  * set application environmnent
- * @see  {@link https://expressjs.com/en/advanced/best-practice-performance.html#set-node_env-to-production}
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
@@ -92,31 +162,7 @@ app.set('port', PORT);
  * @since  0.14.0
  * @version 0.1.0
  */
-app.use(function setCorrelationId(request, response, next) {
-  // obtain passed request or correlation id
-  let correlationId =
-    request.get('X-Request-Id') || request.get('X-Correlation-Id');
-
-  // ensure correlationId
-  correlationId = _.isEmpty(correlationId) ? uuidv1() : correlationId;
-
-  // merge to request headers
-  request.headers = _.merge(
-    {},
-    {
-      'x-correlation-id': correlationId,
-      'x-request-id': correlationId,
-    },
-    request.headers
-  );
-
-  // set response headers
-  response.set('X-Correlation-Id', correlationId);
-  response.set('X-Request-Id', correlationId);
-
-  // continue
-  next();
-});
+app.use(correlationId);
 
 /**
  * use morgan request log middleware
@@ -260,23 +306,6 @@ app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 app.use(respond);
 
 /**
- * @name notFound
- * @function notFound
- * @description middleware to handle un matched routes
- * @param  {Request}   request  valid express http request
- * @param  {Response}   response valid express http response
- * @param  {Function} next middlware to pass control into
- * @author lally elias <lallyelias87@mail.com>
- * @since  0.1.0
- * @version 0.1.0
- */
-app.notFound = function notFound(request, response, next) {
-  const error = new Error('Not Found');
-  error.status = 404;
-  next(error);
-};
-
-/**
  * @name handleError
  * @function handleError
  * @param  {Request}   request  valid express http request
@@ -300,9 +329,8 @@ app.errorHandler = function errorHandler(error, request, response, next) {
  * @since  0.1.0
  * @version 0.1.0
  */
-app.handleNotFound = function handleNotFound(notFound) {
-  const middleware = notFound || app.notFound;
-  app.use(middleware);
+app.handleNotFound = function handleNotFound() {
+  app.use(notFound);
 };
 
 /**
@@ -346,17 +374,9 @@ app.mount = function mount(...routers) {
  * @public
  * @example
  *
- * const app = require('@lykmapipo/express-common');
- *
- * ...initializations
- *
- * app
- *   .start( function onStart(error, env) {
- *     ...
- *   })
- *   .on('error', function onError(error) {
- *     ...
- *   });
+ * const { start } = require('@lykmapipo/express-common');
+ * start();
+ * //=> app
  *
  */
 app.start = function start(port, listener) {
@@ -386,30 +406,46 @@ app.start = function start(port, listener) {
  * @name test
  * @function test
  * @description express app used for api testing
+ * @return {Object} valid express application
  * @author lally elias <lallyelias87@mail.com>
- * @since  0.11.0
+ * @license MIT
+ * @since 0.11.0
  * @version 0.1.0
  * @public
  * @example
+ *
  * const { testApp } = require('@lykmapipo/express-common');
  * request(testApp)
  *   .get(`/v1/users`)
  *   .set('Accept', /json/)
  *   .expect('Content-Type', /json/)
  *   .expect(200).end((error, response) => { ... });
+ *
  */
-Object.defineProperty(app, 'testApp', {
-  get: function getTestApp() {
-    // handle notFound
-    app.handleNotFound();
-    // handle error
-    app.handleErrors();
-    // return express app
-    return app;
-  },
-});
+export const testApp = () => {
+  // handle notFound
+  app.handleNotFound();
+  // handle error
+  app.handleErrors();
+  // return express app
+  return app;
+};
 
 /**
- * export
+ * @name app
+ * @function app
+ * @description express app used for live api
+ * @return {Object} valid express application
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.11.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { app } = require('@lykmapipo/express-common');
+ * app.get('/v1/verify', (req, res, next) => { });
+ * app.start();
+ *
  */
 export default app;

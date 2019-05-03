@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import supertest from 'supertest';
 import { expect } from 'chai';
-import app from '../src/index';
+import app, { testApp } from '../src/index';
 
 describe('app', () => {
   it('should an instance of event emitter', () => {
@@ -10,9 +10,8 @@ describe('app', () => {
   });
 
   it('should expose test app', () => {
-    const { testApp } = app;
     expect(testApp).to.exist;
-    expect(testApp.constructor.name).to.be.equal('EventEmitter');
+    expect(testApp().constructor.name).to.be.equal('EventEmitter');
   });
 
   describe('env', () => {
