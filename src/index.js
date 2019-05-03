@@ -337,32 +337,6 @@ app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 app.use(respond);
 
 /**
- * @name handleNotFound
- * @function handleNotFound
- * @description handle non matched routes
- * @author lally elias <lallyelias87@mail.com>
- * @since  0.1.0
- * @version 0.1.0
- */
-app.handleNotFound = function handleNotFound() {
-  app.use(notFound);
-};
-
-/**
- * @name handleErrors
- * @function handleErrors
- * @description handle errors
- * @author lally elias <lallyelias87@mail.com>
- * @since  0.1.0
- * @version 0.1.0
- * @public
- * @see  {@link http://jsonapi.org/examples/#error-objects}
- */
-app.handleErrors = function handleError() {
-  app.use(errorHandler);
-};
-
-/**
  * @name mount
  * @function mount
  * @description mount router(s) into application
@@ -389,8 +363,8 @@ app.mount = function mount(...routers) {
  * @example
  *
  * const { start } = require('@lykmapipo/express-common');
- * start();
- * //=> app
+ * const app = start((error) => { ... });
+ * //=> { [EventEmitter: app] ... }
  *
  */
 app.start = function start(port, listener) {
@@ -407,8 +381,8 @@ app.start = function start(port, listener) {
   };
 
   // handle notFound & error
-  app.handleNotFound();
-  app.handleErrors();
+  app.use(notFound);
+  app.use(errorHandler);
 
   app.listen(copyOfport, wrappedListener);
 
@@ -437,10 +411,9 @@ app.start = function start(port, listener) {
  *
  */
 export const testApp = () => {
-  // handle notFound
-  app.handleNotFound();
-  // handle error
-  app.handleErrors();
+  // handle notFound & error
+  app.use(notFound);
+  app.use(errorHandler);
   // return express app
   return app;
 };
@@ -459,7 +432,7 @@ export const testApp = () => {
  *
  * const { app } = require('@lykmapipo/express-common');
  * app.get('/v1/verify', (req, res, next) => { });
- * app.start();
+ * app.start((error) => { ... });
  *
  */
 export default app;
