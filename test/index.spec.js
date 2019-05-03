@@ -1,11 +1,7 @@
-// ensure test environment
+import _ from 'lodash';
+import supertest from 'supertest';
+import { expect } from 'chai';
 import app from '../src/index';
-
-// dependencies
-const path = require('path');
-const _ = require('lodash');
-const supertest = require('supertest');
-const { expect } = require('chai');
 
 describe('app', () => {
   it('should an instance of event emitter', () => {
@@ -360,22 +356,6 @@ describe('app', () => {
       const foundB = _.find(app._router.stack, ['handle.uuid', routerB.uuid]);
       expect(foundB).to.exist;
       expect(foundB.handle).to.eql(routerB);
-    });
-
-    it('should be able to mount router from paths into app', () => {
-      // initialize & mount
-      process.env.CWD = path.resolve(__dirname);
-      process.env.APP_PATH = path.resolve(__dirname);
-      const mounted = app.mount('./routers/v1');
-
-      // after
-      expect(mounted.routers).to.exist;
-      expect(mounted.routers).to.have.length(1);
-      expect(app._router).to.exist;
-      expect(app._router.stack).to.exist;
-      const routers = _.filter(app._router.stack, ['name', 'router']);
-      expect(routers).to.exist;
-      expect(routers).to.have.length.above(1);
     });
   });
 });

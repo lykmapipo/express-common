@@ -15,23 +15,22 @@
  */
 
 /* dependencies */
-const path = require('path');
-const _ = require('lodash');
-const uuidv1 = require('uuid/v1');
-const { getString, getBoolean, getNumber, isTest } = require('@lykmapipo/env');
-const express = require('@lykmapipo/express-request-extra');
-const { Router } = require('@lykmapipo/express-router-extra');
-const doMount = require('@lykmapipo/express-router-extra').mount;
-const morgan = require('morgan');
-const cors = require('cors');
-const compression = require('compression');
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
-const serveFavicon = require('serve-favicon');
-const helmet = require('helmet');
-const mquery = require('express-mquery');
-const respond = require('express-respond');
-const { stream } = require('@lykmapipo/logger');
+import path from 'path';
+import _ from 'lodash';
+import uuidv1 from 'uuid/v1';
+import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
+import express from '@lykmapipo/express-request-extra';
+import { mount as doMount, Router } from '@lykmapipo/express-router-extra';
+import morgan from 'morgan';
+import cors from 'cors';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
+import serveFavicon from 'serve-favicon';
+import helmet from 'helmet';
+import mquery from 'express-mquery';
+import respond from 'express-respond';
+import { stream } from '@lykmapipo/logger';
 
 /**
  * ensure process runtime environment

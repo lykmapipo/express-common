@@ -1,1 +1,2 @@
-module.export = function notRouter() {};
+const notRouter = () => {};
+export default notRouter;
