@@ -1,26 +1,13 @@
-'use strict';
+// ensure test environment
+import app from '../src/index';
 
-
-//ensure test environment
-process.env.NODE_ENV = 'test';
-process.env.LOG_ENABLED = false;
-process.env.LOG_FORMAT = 'tiny';
-process.env.SERVE_STATIC = true;
-process.env.SERVE_STATIC_PATH = './test/fixtures'; //relative to process.cwd()
-process.env.BODY_PARSER_LIMIT = '2mb';
-process.env.BODY_PARSER_JSON_TYPE = 'application/json';
-process.env.HELMET_HSTS = false;
-
-
-//dependencies
+// dependencies
 const path = require('path');
 const _ = require('lodash');
 const supertest = require('supertest');
-const expect = require('chai').expect;
-const app = require(path.join(__dirname, '..'));
+const { expect } = require('chai');
 
 describe('app', () => {
-
   it('should an instance of event emitter', () => {
     expect(app).to.exist;
     expect(app.constructor.name).to.be.equal('EventEmitter');
@@ -33,7 +20,6 @@ describe('app', () => {
   });
 
   describe('env', () => {
-
     it('should have default runtime environment', () => {
       const env = app.get('env');
       expect(env).to.exist;
@@ -41,7 +27,7 @@ describe('app', () => {
     });
 
     it('should be able to change runtime environment', () => {
-      //remember
+      // remember
       const last = app.get('env');
 
       app.set('env', 'stage');
@@ -50,20 +36,17 @@ describe('app', () => {
       expect(env).to.be.equal('stage');
       expect(env).to.not.be.equal(last);
 
-      //restore
+      // restore
       app.set('env', last);
     });
-
   });
 
-
   describe('cors', () => {
-
     app.get('/cors', (request, response) => {
       response.json({});
     });
 
-    it('should set `cors` middleware', (done) => {
+    it('should set `cors` middleware', done => {
       supertest(app)
         .get('/cors')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -72,16 +55,14 @@ describe('app', () => {
         .expect('Access-Control-Allow-Origin', '*')
         .end(done);
     });
-
   });
 
   describe('compression', () => {
-
     app.get('/compressions', (request, response) => {
       response.json({});
     });
 
-    it('should be able to serve static content', (done) => {
+    it('should be able to serve static content', done => {
       supertest(app)
         .get('/compressions')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -91,12 +72,10 @@ describe('app', () => {
         .expect('vary', 'Accept-Encoding')
         .end(done);
     });
-
   });
 
   describe('serve static', () => {
-
-    it('should be able to serve static content', (done) => {
+    it('should be able to serve static content', done => {
       supertest(app)
         .get('/sample.png')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -105,18 +84,16 @@ describe('app', () => {
         .expect('Access-Control-Allow-Origin', '*')
         .end(done);
     });
-
   });
 
   describe('body parser', () => {
-
     app.post('/parsers', (request, response) => {
       response.json(request.body);
     });
 
-    it('should be able to parse json bodies', (done) => {
+    it('should be able to parse json bodies', done => {
       const body = {
-        point: 4
+        point: 4,
       };
       supertest(app)
         .post('/parsers')
@@ -126,7 +103,7 @@ describe('app', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .expect('Access-Control-Allow-Origin', '*')
-        .end(function (error, response) {
+        .end((error, response) => {
           expect(error).to.not.exist;
           expect(response.body).to.exist;
           expect(response.body).to.be.eql(body);
@@ -134,10 +111,9 @@ describe('app', () => {
         });
     });
 
-
-    it('should be able to parse url-encoded bodies', (done) => {
+    it('should be able to parse url-encoded bodies', done => {
       const body = {
-        grade: 'A'
+        grade: 'A',
       };
       supertest(app)
         .post('/parsers')
@@ -147,24 +123,22 @@ describe('app', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .expect('Access-Control-Allow-Origin', '*')
-        .end(function (error, response) {
+        .end((error, response) => {
           expect(error).to.not.exist;
           expect(response.body).to.exist;
           expect(response.body).to.be.eql(body);
           done(error, response);
         });
     });
-
   });
 
   describe('overrides', () => {
-
     app.all('/overrides', (request, response) => {
       response.set('X-Got-Method', request.method);
       response.json(request.body);
     });
 
-    it('should set `overrides` middleware', (done) => {
+    it('should set `overrides` middleware', done => {
       supertest(app)
         .get('/overrides')
         .expect(200)
@@ -172,7 +146,7 @@ describe('app', () => {
         .end(done);
     });
 
-    it('should set `overrides` middleware', (done) => {
+    it('should set `overrides` middleware', done => {
       supertest(app)
         .post('/overrides')
         .set('X-HTTP-Method', 'DELETE')
@@ -181,7 +155,7 @@ describe('app', () => {
         .end(done);
     });
 
-    it('should set `overrides` middleware', (done) => {
+    it('should set `overrides` middleware', done => {
       supertest(app)
         .post('/overrides')
         .set('X-HTTP-Method-Override', 'DELETE')
@@ -190,7 +164,7 @@ describe('app', () => {
         .end(done);
     });
 
-    it('should set `overrides` middleware', (done) => {
+    it('should set `overrides` middleware', done => {
       supertest(app)
         .post('/overrides')
         .set('X-Method-Override', 'DELETE')
@@ -199,24 +173,21 @@ describe('app', () => {
         .end(done);
     });
 
-    it('should set `overrides` middleware', (done) => {
+    it('should set `overrides` middleware', done => {
       supertest(app)
         .post('/overrides?_method=DELETE')
         .expect(200)
         .expect('X-Got-Method', 'DELETE')
         .end(done);
     });
-
   });
 
-
   describe('helmet', () => {
-
     app.get('/helmets', (request, response) => {
       response.json({});
     });
 
-    it('should set `helmet` middleware', (done) => {
+    it('should set `helmet` middleware', done => {
       supertest(app)
         .get('/helmets')
         .expect(200)
@@ -229,45 +200,42 @@ describe('app', () => {
         .expect('X-XSS-Protection', '1; mode=block')
         .end(done);
     });
-
   });
 
   describe('request-id', () => {
-
     app.get('/request-id', (request, response) => {
       expect(request.headers['x-correlation-id']).to.exist;
       expect(request.headers['x-request-id']).to.exist;
       response.json({});
     });
 
-    it('should set `request-id` middleware', (done) => {
+    it('should set `request-id` middleware', done => {
       supertest(app)
         .get('/request-id')
         .expect(200)
         .end((error, response) => {
           expect(response.headers['x-correlation-id']).to.exist;
           expect(response.headers['x-request-id']).to.exist;
-          expect(response.headers['x-request-id'])
-            .to.be.equal(response.headers['x-correlation-id']);
+          expect(response.headers['x-request-id']).to.be.equal(
+            response.headers['x-correlation-id']
+          );
           done(error, response);
         });
     });
-
   });
 
   describe('mquery', () => {
-
     app.get('/mquery', (request, response) => {
       response.json(request.mquery);
     });
 
-    it('should set `mquery` middleware', (done) => {
+    it('should set `mquery` middleware', done => {
       const query = {
         filter: { age: { $gte: 12 } },
         paginate: { limit: 20, skip: 0, page: 1 },
         populate: [{ path: 'customer' }],
         select: { name: 1 },
-        sort: { name: 1, email: -1 }
+        sort: { name: 1, email: -1 },
       };
       supertest(app)
         .get(
@@ -275,7 +243,7 @@ describe('app', () => {
         )
         .expect(200)
         .expect('Content-Type', /json/)
-        .end(function (error, response) {
+        .end((error, response) => {
           expect(error).to.not.exist;
           expect(response).to.exist;
           const mquery = response.body;
@@ -289,16 +257,14 @@ describe('app', () => {
           done(error, response);
         });
     });
-
   });
 
   describe('respond', () => {
-
     app.get('/respond', (request, response) => {
       response.ok({});
     });
 
-    it('should set `respond` middleware', (done) => {
+    it('should set `respond` middleware', done => {
       supertest(app)
         .get('/respond')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -312,7 +278,7 @@ describe('app', () => {
       response.error(new Error('Server Error'));
     });
 
-    it('should set `respond` middleware', (done) => {
+    it('should set `respond` middleware', done => {
       supertest(app)
         .get('/respond-error')
         .set('Accept-Encoding', 'gzip, deflate, br')
@@ -327,87 +293,82 @@ describe('app', () => {
           done();
         });
     });
-
   });
 
   describe('mount', () => {
-
     it('should be able to mount router into app', () => {
-
-      //initialize & mount
+      // initialize & mount
       const router = new app.Router();
-      router.get('/samples', function (req, res) { res.json(req.body); });
+      router.get('/samples', (req, res) => {
+        res.json(req.body);
+      });
       const mounted = app.mount(router);
 
-      //after
+      // after
       expect(mounted.routers).to.exist;
       expect(mounted.routers).to.have.length(1);
       expect(app._router).to.exist;
       expect(app._router.stack).to.exist;
-      const found =
-        _.find(app._router.stack, ['handle.uuid', router.uuid]);
+      const found = _.find(app._router.stack, ['handle.uuid', router.uuid]);
       expect(found).to.exist;
       expect(found.handle).to.eql(router);
-
     });
 
     it('should be able to mount router only once into app', () => {
-
-      //initialize & mount
+      // initialize & mount
       const router = new app.Router();
-      router.get('/samples', function (req, res) { res.json(req.body); });
+      router.get('/samples', (req, res) => {
+        res.json(req.body);
+      });
       const mounted = app.mount(router, router);
 
-      //after
+      // after
       expect(mounted.routers).to.exist;
       expect(mounted.routers).to.have.length(1);
       expect(app._router).to.exist;
       expect(app._router.stack).to.exist;
-      const founds =
-        _.filter(app._router.stack, ['handle.uuid', router.uuid]);
+      const founds = _.filter(app._router.stack, ['handle.uuid', router.uuid]);
       expect(founds).to.exist;
       expect(founds).to.have.length(1);
       expect(_.first(founds).handle).to.eql(router);
-
     });
 
     it('should be able to mount routers into app', () => {
-
-      //initialize & mount
+      // initialize & mount
       const routerA = new app.Router();
-      routerA.get('/a', function (req, res) { res.json(req.body); });
+      routerA.get('/a', (req, res) => {
+        res.json(req.body);
+      });
 
       const routerB = new app.Router();
-      routerB.get('/b', function (req, res) { res.json(req.body); });
+      routerB.get('/b', (req, res) => {
+        res.json(req.body);
+      });
 
       const mounted = app.mount(routerA, routerB);
 
-      //after
+      // after
       expect(mounted.routers).to.exist;
       expect(mounted.routers).to.have.length(2);
       expect(app._router).to.exist;
       expect(app._router.stack).to.exist;
 
-      const foundA =
-        _.find(app._router.stack, ['handle.uuid', routerA.uuid]);
+      const foundA = _.find(app._router.stack, ['handle.uuid', routerA.uuid]);
       expect(foundA).to.exist;
       expect(foundA.handle).to.eql(routerA);
 
-      const foundB =
-        _.find(app._router.stack, ['handle.uuid', routerB.uuid]);
+      const foundB = _.find(app._router.stack, ['handle.uuid', routerB.uuid]);
       expect(foundB).to.exist;
       expect(foundB.handle).to.eql(routerB);
-
     });
 
     it('should be able to mount router from paths into app', () => {
-
-      //initialize & mount
-      process.env.CWD =
-        process.env.APP_PATH = path.resolve(__dirname);
+      // initialize & mount
+      process.env.CWD = path.resolve(__dirname);
+      process.env.APP_PATH = path.resolve(__dirname);
       const mounted = app.mount('./routers/v1');
 
-      //after
+      // after
       expect(mounted.routers).to.exist;
       expect(mounted.routers).to.have.length(1);
       expect(app._router).to.exist;
@@ -415,9 +376,6 @@ describe('app', () => {
       const routers = _.filter(app._router.stack, ['name', 'router']);
       expect(routers).to.exist;
       expect(routers).to.have.length.above(1);
-
     });
-
   });
-
 });

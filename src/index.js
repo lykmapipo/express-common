@@ -1,6 +1,3 @@
-'use strict';
-
-
 /**
  * @name express-common
  * @description minimal express app configuration
@@ -10,26 +7,20 @@
  * @example
  * const http = require('http');
  * const app = require('@lykmapipo/express-common');
- * 
+ *
  * ...additional setups
- * 
+ *
  * const server = http.createServer(app);
  * server.listen(3000);
  */
-
 
 /* dependencies */
 const path = require('path');
 const _ = require('lodash');
 const uuidv1 = require('uuid/v1');
-const {
-  getString,
-  getBoolean,
-  getNumber,
-  isTest
-} = require('@lykmapipo/env');
+const { getString, getBoolean, getNumber, isTest } = require('@lykmapipo/env');
 const express = require('@lykmapipo/express-request-extra');
-const Router = require('@lykmapipo/express-router-extra').Router;
+const { Router } = require('@lykmapipo/express-router-extra');
 const doMount = require('@lykmapipo/express-router-extra').mount;
 const morgan = require('morgan');
 const cors = require('cors');
@@ -42,13 +33,11 @@ const mquery = require('express-mquery');
 const respond = require('express-respond');
 const { stream } = require('@lykmapipo/logger');
 
-
 /**
  * ensure process runtime environment
  * @default development
  */
 process.env.NODE_ENV = getString('NODE_ENV', 'development');
-
 
 /**
  * ensure process BASE_PATH
@@ -56,20 +45,19 @@ process.env.NODE_ENV = getString('NODE_ENV', 'development');
  */
 process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
 
-
 /**
  * ensure process APP_PATH
  * @default process.cwd()
  */
-process.env.APP_PATH =
-  path.resolve(process.env.BASE_PATH, process.env.APP_PATH || '');
-
+process.env.APP_PATH = path.resolve(
+  process.env.BASE_PATH,
+  process.env.APP_PATH || ''
+);
 
 /**
  * initialize express application
  */
 const app = express();
-
 
 /**
  * @name Router
@@ -80,7 +68,6 @@ const app = express();
  */
 app.Router = Router;
 
-
 /**
  * set application environmnent
  * @see  {@link https://expressjs.com/en/advanced/best-practice-performance.html#set-node_env-to-production}
@@ -90,7 +77,6 @@ app.Router = Router;
  */
 app.set('env', getString('NODE_ENV'));
 
-
 /**
  * set application port
  * @author lally elias <lallyelias87@mail.com>
@@ -99,7 +85,6 @@ app.set('env', getString('NODE_ENV'));
  */
 const PORT = getNumber('PORT', 5000);
 app.set('port', PORT);
-
 
 /**
  * ensure request id or correlation id
@@ -111,16 +96,20 @@ app.set('port', PORT);
 app.use(function setCorrelationId(request, response, next) {
   // obtain passed request or correlation id
   let correlationId =
-    (request.get('X-Request-Id') || request.get('X-Correlation-Id'));
+    request.get('X-Request-Id') || request.get('X-Correlation-Id');
 
   // ensure correlationId
-  correlationId = (_.isEmpty(correlationId) ? uuidv1() : correlationId);
+  correlationId = _.isEmpty(correlationId) ? uuidv1() : correlationId;
 
   // merge to request headers
-  request.headers = _.merge({}, {
-    'x-correlation-id': correlationId,
-    'x-request-id': correlationId,
-  }, request.headers);
+  request.headers = _.merge(
+    {},
+    {
+      'x-correlation-id': correlationId,
+      'x-request-id': correlationId,
+    },
+    request.headers
+  );
 
   // set response headers
   response.set('X-Correlation-Id', correlationId);
@@ -143,7 +132,6 @@ if (LOG_ENABLED) {
   app.use(morgan(LOG_FORMAT, { stream }));
 }
 
-
 /**
  * use cors middleware
  * @see {@link https://github.com/expressjs/cors}
@@ -153,7 +141,6 @@ if (LOG_ENABLED) {
  */
 app.use(cors());
 
-
 /**
  * use compression middleware
  * @see {@link https://github.com/expressjs/compression}
@@ -162,7 +149,6 @@ app.use(cors());
  * @version 0.1.0
  */
 app.use(compression());
-
 
 /**
  * use express.static middleware
@@ -180,7 +166,6 @@ if (SERVE_STATIC) {
   app.use(express.static(STATIC_PATH));
 }
 
-
 /**
  * use serve favicon middleware
  * @see {@link https://github.com/expressjs/serve-favicon}
@@ -194,7 +179,6 @@ if (SERVE_FAVICON) {
   app.use(serveFavicon(FAVICON_PATH));
 }
 
-
 /**
  * use body-parser middleware
  * @description parse application/x-www-form-urlencoded bodies
@@ -204,11 +188,12 @@ if (SERVE_FAVICON) {
  * @version 0.1.0
  */
 const BODY_PARSER_LIMIT = getString('BODY_PARSER_LIMIT', '2mb');
-app.use(bodyParser.urlencoded({
-  extended: true,
-  limit: BODY_PARSER_LIMIT
-}));
-
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+    limit: BODY_PARSER_LIMIT,
+  })
+);
 
 /**
  * use body-parser middleware
@@ -218,13 +203,16 @@ app.use(bodyParser.urlencoded({
  * @since  0.1.0
  * @version 0.1.0
  */
-const BODY_PARSER_JSON_TYPE =
-  getString('BODY_PARSER_JSON_TYPE', 'application/json');
-app.use(bodyParser.json({
-  type: BODY_PARSER_JSON_TYPE,
-  limit: BODY_PARSER_LIMIT
-}));
-
+const BODY_PARSER_JSON_TYPE = getString(
+  'BODY_PARSER_JSON_TYPE',
+  'application/json'
+);
+app.use(
+  bodyParser.json({
+    type: BODY_PARSER_JSON_TYPE,
+    limit: BODY_PARSER_LIMIT,
+  })
+);
 
 /**
  * use method-override middleware
@@ -237,7 +225,6 @@ app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
 app.use(methodOverride('X-Method-Override')); // IBM
 app.use(methodOverride('_method')); // query param
-
 
 /**
  * use helmet middleware
@@ -253,7 +240,6 @@ if (HELMET_HSTS) {
   app.use(helmet({ hsts: false }));
 }
 
-
 /**
  * use express-mquery middleware
  * @see {@link https://github.com/lykmapipo/express-mquery}
@@ -265,7 +251,6 @@ const MQUERY_LIMIT = getNumber('MQUERY_LIMIT', 10);
 const MQUERY_MAX_LIMIT = getNumber('MQUERY_MAX_LIMIT', 50);
 app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 
-
 /**
  * use express-respond middleware
  * @see {@link https://github.com/lykmapipo/express-respond}
@@ -275,11 +260,10 @@ app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
  */
 app.use(respond);
 
-
 /**
  * @name notFound
  * @function notFound
- * @description middleware to handle un matched routes 
+ * @description middleware to handle un matched routes
  * @param  {Request}   request  valid express http request
  * @param  {Response}   response valid express http response
  * @param  {Function} next middlware to pass control into
@@ -288,13 +272,10 @@ app.use(respond);
  * @version 0.1.0
  */
 app.notFound = function notFound(request, response, next) {
-  let error = new Error('Not Found');
+  const error = new Error('Not Found');
   error.status = 404;
   next(error);
 };
-
-
-/*jshint unused:false */
 
 /**
  * @name handleError
@@ -307,18 +288,15 @@ app.notFound = function notFound(request, response, next) {
  * @version 0.2.0
  * @see  {@link http://jsonapi.org/examples/#error-objects}
  */
+// eslint-disable-next-line no-unused-vars
 app.errorHandler = function errorHandler(error, request, response, next) {
   response.error(error);
 };
 
-/*jshint unused:true */
-
-
-
 /**
  * @name handleNotFound
  * @function handleNotFound
- * @description handle non matched routes 
+ * @description handle non matched routes
  * @author lally elias <lallyelias87@mail.com>
  * @since  0.1.0
  * @version 0.1.0
@@ -327,7 +305,6 @@ app.handleNotFound = function handleNotFound(notFound) {
   const middleware = notFound || app.notFound;
   app.use(middleware);
 };
-
 
 /**
  * @name handleErrors
@@ -344,7 +321,6 @@ app.handleErrors = function handleError(errorHandler) {
   app.use(middleware);
 };
 
-
 /**
  * @name mount
  * @function mount
@@ -359,7 +335,6 @@ app.mount = function mount(...routers) {
   return doMount(...routers).into(app);
 };
 
-
 /**
  * @name start
  * @function start
@@ -371,7 +346,7 @@ app.mount = function mount(...routers) {
  * @version 0.1.0
  * @public
  * @example
- * 
+ *
  * const app = require('@lykmapipo/express-common');
  *
  * ...initializations
@@ -383,31 +358,30 @@ app.mount = function mount(...routers) {
  *   .on('error', function onError(error) {
  *     ...
  *   });
- *   
+ *
  */
 app.start = function start(port, listener) {
+  // ensure port
+  let copyOfport = PORT;
+  copyOfport = _.isNumber(port) ? port : copyOfport;
 
-  //ensure port
-  let _port = PORT;
-  _port = _.isNumber(port) ? port : _port;
-
-  //ensure listener
-  const _listener = function () {
+  // ensure listener
+  const wrappedListener = () => {
     const cb = _.isFunction(port) ? port : listener;
-    cb && cb(null, process.env);
+    if (cb) {
+      cb(null, process.env);
+    }
   };
 
-  //handle notFound & error
+  // handle notFound & error
   app.handleNotFound();
   app.handleErrors();
 
-  app.listen(_port, _listener);
+  app.listen(copyOfport, wrappedListener);
 
-  //return app for chaining
+  // return app for chaining
   return app;
-
 };
-
 
 /**
  * @name test
@@ -433,11 +407,10 @@ Object.defineProperty(app, 'testApp', {
     app.handleErrors();
     // return express app
     return app;
-  }
+  },
 });
-
 
 /**
  * export
  */
-module.exports = exports = app;
+export default app;
