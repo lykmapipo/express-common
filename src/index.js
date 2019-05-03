@@ -400,8 +400,8 @@ export const start = (port, listener) => {
 };
 
 /**
- * @name test
- * @function test
+ * @name testApp
+ * @function testApp
  * @description express app used for api testing
  * @return {Object} valid express application
  * @author lally elias <lallyelias87@mail.com>
