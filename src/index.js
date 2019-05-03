@@ -340,13 +340,22 @@ app.use(respond);
  * @name mount
  * @function mount
  * @description mount router(s) into application
- * @param {routesr} routers set of routers or paths to load
+ * @param {...Router} routers valid set of express routers to mount on app
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
  * @public
+ * @example
+ *
+ * const { mount, Router } = require('@lykmapipo/express-common');
+ *
+ * const router = new Router({ version: '1.0.0' });
+ * const app = mount(router);
+ * //=> { [EventEmitter: app] ... }
+ *
  */
-app.mount = function mount(...routers) {
+export const mount = (...routers) => {
   return doMount(...routers).into(app);
 };
 

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import supertest from 'supertest';
 import { expect } from 'chai';
-import app, { testApp } from '../src/index';
+import app, { mount, testApp } from '../src/index';
 
 describe('app', () => {
   it('should an instance of event emitter', () => {
@@ -298,7 +298,7 @@ describe('mount', () => {
     router.get('/samples', (req, res) => {
       res.json(req.body);
     });
-    const mounted = app.mount(router);
+    const mounted = mount(router);
 
     // after
     expect(mounted.routers).to.exist;
@@ -316,7 +316,7 @@ describe('mount', () => {
     router.get('/samples', (req, res) => {
       res.json(req.body);
     });
-    const mounted = app.mount(router, router);
+    const mounted = mount(router, router);
 
     // after
     expect(mounted.routers).to.exist;
@@ -341,7 +341,7 @@ describe('mount', () => {
       res.json(req.body);
     });
 
-    const mounted = app.mount(routerA, routerB);
+    const mounted = mount(routerA, routerB);
 
     // after
     expect(mounted.routers).to.exist;
