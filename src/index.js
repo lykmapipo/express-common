@@ -1,4 +1,5 @@
 /**
+ * @module express-common
  * @name express-common
  * @description minimal express app configuration
  * @author lally elias <lallyelias87@mail.com>
@@ -98,9 +99,38 @@ export const correlationId = (request, response, next) => {
  *
  */
 export const notFound = (request, response, next) => {
+  // build not foound error
   const error = new Error('Not Found');
   error.status = 404;
+
+  // continue
   next(error);
+};
+
+/**
+ * @name errorHandler
+ * @function errorHandler
+ * @description http middleware to handle errors
+ * @param {Request} request valid express request object
+ * @param {Response} response valid express response object
+ * @return {Function} next valid express next middlware to pass control to
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.15.0
+ * @version 0.1.0
+ * @static
+ * @public
+ * @example
+ *
+ * const { errorHandler } = require('@lykmapipo/express-common');
+ * app.use(errorHandler)
+ *
+ */
+// eslint-disable-next-line no-unused-vars
+export const errorHandler = (error, request, response, next) => {
+  // TODO log error using logger
+  // reply with error
+  response.error(error);
 };
 
 /**
@@ -306,22 +336,6 @@ app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 app.use(respond);
 
 /**
- * @name handleError
- * @function handleError
- * @param  {Request}   request  valid express http request
- * @param  {Response}   response valid express http response
- * @param  {Function} next middlware to pass control into
- * @author lally elias <lallyelias87@mail.com>
- * @since  0.1.0
- * @version 0.2.0
- * @see  {@link http://jsonapi.org/examples/#error-objects}
- */
-// eslint-disable-next-line no-unused-vars
-app.errorHandler = function errorHandler(error, request, response, next) {
-  response.error(error);
-};
-
-/**
  * @name handleNotFound
  * @function handleNotFound
  * @description handle non matched routes
@@ -343,9 +357,8 @@ app.handleNotFound = function handleNotFound() {
  * @public
  * @see  {@link http://jsonapi.org/examples/#error-objects}
  */
-app.handleErrors = function handleError(errorHandler) {
-  const middleware = errorHandler || app.errorHandler;
-  app.use(middleware);
+app.handleErrors = function handleError() {
+  app.use(errorHandler);
 };
 
 /**
