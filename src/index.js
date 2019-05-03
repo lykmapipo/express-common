@@ -376,7 +376,7 @@ export const mount = (...routers) => {
  * //=> { [EventEmitter: app] ... }
  *
  */
-app.start = function start(port, listener) {
+export const start = (port, listener) => {
   // ensure port
   let copyOfport = PORT;
   copyOfport = _.isNumber(port) ? port : copyOfport;
@@ -423,7 +423,8 @@ export const testApp = () => {
   // handle notFound & error
   app.use(notFound);
   app.use(errorHandler);
-  // return express app
+
+  // return app fot testing
   return app;
 };
 
