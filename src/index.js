@@ -9,8 +9,8 @@
  * @example
  *
  * const { start } = require('@lykmapipo/express-common');
- * start();
- * //=> app
+ * const app = start((error) => { ... });
+ * //=> { [EventEmitter: app] ... }
  *
  */
 
@@ -50,8 +50,9 @@ import { stream } from '@lykmapipo/logger';
  * @example
  *
  * const { correlationId } = require('@lykmapipo/express-common');
- * app.use(correlationId)
- *
+ * app.use(correlationId);
+ * //=> request.headers {'x-correlation-id': ..., 'x-request-id': ...}
+ * //=> response._headers {'x-correlation-id': ..., 'x-request-id': ...}
  *
  */
 export const correlationId = (request, response, next) => {
@@ -95,7 +96,7 @@ export const correlationId = (request, response, next) => {
  * @example
  *
  * const { notFound } = require('@lykmapipo/express-common');
- * app.use(notFound)
+ * app.use(notFound);
  *
  */
 export const notFound = (request, response, next) => {
@@ -123,7 +124,7 @@ export const notFound = (request, response, next) => {
  * @example
  *
  * const { errorHandler } = require('@lykmapipo/express-common');
- * app.use(errorHandler)
+ * app.use(errorHandler);
  *
  */
 // eslint-disable-next-line no-unused-vars
