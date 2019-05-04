@@ -33,8 +33,8 @@ $ npm install --save @lykmapipo/express-common
 
 ## Usage
 
-```javascript
-const { app, mount, Router, start } = require('@lykmapipo/express-common');
+```js
+const { mount, Router, start } = require('@lykmapipo/express-common');
 
 const router = new Router({
     version: '1.0.0'
@@ -49,6 +49,27 @@ start((error) => { ... });
 curl http://0.0.0.0:5000/v1/users
 ```
 
+## Environment
+```js
+NODE_ENV=development
+PORT=5000
+TRUST_PROXY=false
+SERVE_STATIC=true
+SERVE_STATIC_PATH=public
+SERVE_FAVICON=false
+BODY_PARSER_LIMIT=2mb
+BODY_PARSER_JSON_TYPE=application/json
+HELMET_HSTS=false
+MQUERY_LIMIT=10
+MQUERY_MAX_LIMIT=50
+LOGGER_LOG_ENABLED=true
+LOGGER_LOG_LEVEL=silly
+LOGGER_USE_CONSOLE=true
+LOGGER_USE_FILE=true
+LOGGER_LOG_PATH=./logs/app-%DATE%.log
+LOGGER_LOG_IGNORE=password,apiKey,secret,client_secret
+LOGGER_LOG_HTTP_FORMAT=combined
+```
 
 ## Testing
 * Clone this repository
