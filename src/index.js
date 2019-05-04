@@ -15,11 +15,11 @@
  */
 
 /* dependencies */
+import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
 import path from 'path';
 import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { mergeObjects } from '@lykmapipo/common';
-import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
 import express from '@lykmapipo/express-request-extra';
 import { mount as doMount, Router } from '@lykmapipo/express-router-extra';
 import morgan from 'morgan';
@@ -32,6 +32,57 @@ import helmet from 'helmet';
 import mquery from 'express-mquery';
 import respond from 'express-respond';
 import { stream } from '@lykmapipo/logger';
+
+/**
+ * @constant
+ * @name NODE_ENV
+ * @type {String}
+ * @description setup and ensure process runtime environment
+ * @default development
+ * @since  0.1.0
+ * @version 0.1.0
+ * @example
+ *
+ * const NODE_ENV = process.env.NODE_ENV
+ * //=> development
+ *
+ */
+process.env.NODE_ENV = getString('NODE_ENV', 'development');
+
+/**
+ * @constant
+ * @name BASE_PATH
+ * @type {String}
+ * @description setup and ensure process BASE_PATH
+ * @default process.cwd()
+ * @since  0.1.0
+ * @version 0.1.0
+ * @example
+ *
+ * const BASE_PATH = process.env.BASE_PATH
+ * //=> /home/...
+ *
+ */
+process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
+
+/**
+ * @constant
+ * @name APP_PATH
+ * @type {String}
+ * @description setup and ensure process APP_PATH
+ * @default process.cwd()
+ * @since  0.1.0
+ * @version 0.1.0
+ * @example
+ *
+ * const APP_PATH = process.env.APP_PATH
+ * //=> /home/...
+ *
+ */
+process.env.APP_PATH = path.resolve(
+  process.env.BASE_PATH,
+  process.env.APP_PATH || ''
+);
 
 /**
  * @function correlationId
@@ -158,27 +209,6 @@ export const errorHandler = (error, request, response, next) => {
  *
  */
 export { Router };
-
-/**
- * ensure process runtime environment
- * @default development
- */
-process.env.NODE_ENV = getString('NODE_ENV', 'development');
-
-/**
- * ensure process BASE_PATH
- * @default process.cwd()
- */
-process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
-
-/**
- * ensure process APP_PATH
- * @default process.cwd()
- */
-process.env.APP_PATH = path.resolve(
-  process.env.BASE_PATH,
-  process.env.APP_PATH || ''
-);
 
 /**
  * initialize express application
