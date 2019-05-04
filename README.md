@@ -34,25 +34,19 @@ $ npm install --save @lykmapipo/express-common
 ## Usage
 
 ```javascript
-'use strict';
-
-//dependencies
-const path = require('path');
-const app = require('@lykmapipo/express-common');
-const Router = app.Router;
+const { app, mount, Router, start } = require('@lykmapipo/express-common');
 
 const router = new Router({
-  version: '1.0.0'
+    version: '1.0.0'
 });
 router.get('/users', ...);
+mount(router);
 
-app.mount(router);
-app.start();
-
+start((error) => { ... });
 ```
 
 ```curl
-curl http://0.0.0.0:5000/v1.0.0/users
+curl http://0.0.0.0:5000/v1/users
 ```
 
 
