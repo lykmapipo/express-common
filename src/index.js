@@ -238,41 +238,74 @@ export { Router };
 export const app = express();
 
 /**
- * set application environmnent
+ * @const
+ * @name env
+ * @type {String}
+ * @default development
+ * @description set express application environmnent
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * app.set('env', getString('NODE_ENV'));
+ * app.get('env')
+ * //=> development
+ *
  */
-app.set('env', getString('NODE_ENV'));
+app.set('env', getString('NODE_ENV', 'development'));
 
 /**
- * set application port
+ * @const
+ * @name port
+ * @type {Number}
+ * @default 5000
+ * @description set express application port
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * app.set('port', getNumber('PORT', 5000));
+ * app.get('port')
+ * //=> 5000
+ *
  */
-const PORT = getNumber('PORT', 5000);
-app.set('port', PORT);
+app.set('port', getNumber('PORT', 5000));
 
 /**
- * ensure request id or correlation id
- * @see {@link https://github.com/expressjs/morgan}
+ * @descrition ensure request id or correlation id
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.14.0
  * @version 0.1.0
+ * @example
+ *
+ * app.use(correlationId);
+ *
  */
 app.use(correlationId);
 
 /**
- * use morgan request log middleware
+ * @description setup and use morgan request log middleware
  * @see {@link https://github.com/expressjs/morgan}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * process.env.LOGGER_LOG_ENABLED=true
+ * process.env.LOGGER_LOG_HTTP_FORMAT=combined
+ *
+ * app.use(morgan(LOGGER_LOG_HTTP_FORMAT, { stream }));
+ *
  */
-const LOG_ENABLED = getBoolean('LOG_ENABLED', false) && !isTest();
+const LOG_ENABLED = getBoolean('LOGGER_LOG_ENABLED', false) && !isTest();
 if (LOG_ENABLED) {
-  const LOG_FORMAT = getString('LOG_FORMAT', 'combined');
+  const LOG_FORMAT = getString('LOGGER_LOG_HTTP_FORMAT', 'combined');
   app.use(morgan(LOG_FORMAT, { stream }));
 }
 
@@ -446,7 +479,7 @@ export const mount = (...routers) => {
  */
 export const start = (port, listener) => {
   // ensure port
-  let copyOfport = PORT;
+  let copyOfport = getNumber('PORT', 5000);
   copyOfport = _.isNumber(port) ? port : copyOfport;
 
   // ensure listener
