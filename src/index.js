@@ -276,7 +276,7 @@ app.set('env', getString('NODE_ENV', 'development'));
 app.set('port', getNumber('PORT', 5000));
 
 /**
- * @descrition ensure request id or correlation id
+ * @descrition setupt and use correlationId middleware
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since  0.14.0
@@ -310,30 +310,48 @@ if (LOG_ENABLED) {
 }
 
 /**
- * use cors middleware
+ * @description setup and use cors middleware
  * @see {@link https://github.com/expressjs/cors}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * app.use(cors());
+ *
  */
 app.use(cors());
 
 /**
- * use compression middleware
+ * @description use compression middleware
  * @see {@link https://github.com/expressjs/compression}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * app.use(compression());
+ *
  */
 app.use(compression());
 
 /**
- * use express.static middleware
+ * @description setup and use express.static middleware
  * @see {@link http://expressjs.com/en/starter/static-files.html}
  * @see {@link http://expressjs.com/en/4x/api.html#express.static}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * process.env.SERVER_STATIC=true
+ * process.env.SERVE_STATIC_PATH=public
+ *
+ * app.use(express.static(STATIC_PATH));
+ *
  */
 const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
 let STATIC_PATH;
@@ -344,11 +362,18 @@ if (SERVE_STATIC) {
 }
 
 /**
- * use serve favicon middleware
+ * @description setup and use serve favicon middleware
  * @see {@link https://github.com/expressjs/serve-favicon}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.9.0
+ * @example
+ *
+ * process.env.SERVE_FAVICON=true
+ *
+ * app.use(serveFavicon(FAVICON_PATH));
+ *
  */
 const SERVE_FAVICON = getBoolean('SERVE_FAVICON', false);
 if (SERVE_FAVICON) {
@@ -357,12 +382,19 @@ if (SERVE_FAVICON) {
 }
 
 /**
- * use body-parser middleware
+ * @description setup and use urlencoded body-parser middleware
  * @description parse application/x-www-form-urlencoded bodies
  * @see {@link https: //github.com/expressjs/body-parser}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * process.env.BODY_PARSER_LIMIT=2MB
+ *
+ * app.use(bodyParse.urlencoded({ ... }));
+ *
  */
 const BODY_PARSER_LIMIT = getString('BODY_PARSER_LIMIT', '2mb');
 app.use(
@@ -373,12 +405,19 @@ app.use(
 );
 
 /**
- * use body-parser middleware
- * @description parse application/*+json bodies
+ * @description setup and use json body-parser middleware
  * @see {@link https: //github.com/expressjs/body-parser}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * process.env.BODY_PARSER_JSON_TYPE=application/json
+ * process.env.BODY_PARSER_LIMIT=2mb
+ *
+ * app.use(bodyParser.json({ ... }));
+ *
  */
 const BODY_PARSER_JSON_TYPE = getString(
   'BODY_PARSER_JSON_TYPE',
@@ -392,11 +431,19 @@ app.use(
 );
 
 /**
- * use method-override middleware
+ * @description setup and use method-override middleware
  * @see {@link https://github.com/expressjs/method-override}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * app.use(methodOverride('X-HTTP-Method'));
+ * app.use(methodOverride('X-HTTP-Method-Override'));
+ * app.use(methodOverride('X-Method-Override'));
+ * app.use(methodOverride('_method'));
+ *
  */
 app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
@@ -404,11 +451,18 @@ app.use(methodOverride('X-Method-Override')); // IBM
 app.use(methodOverride('_method')); // query param
 
 /**
- * use helmet middleware
+ * @description setup and use helmet middleware
  * @see {@link https://github.com/helmetjs/helmet}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * process.env.HELMET_HSTS=false
+ *
+ * app.use(helmet());
+ *
  */
 const HELMET_HSTS = getBoolean('HELMET_HSTS', false);
 if (HELMET_HSTS) {
@@ -418,22 +472,35 @@ if (HELMET_HSTS) {
 }
 
 /**
- * use express-mquery middleware
+ * @description setup and use express-mquery middleware
  * @see {@link https://github.com/lykmapipo/express-mquery}
  * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * process.env.MQUERY_LIMIT=10
+ * process.env.MQUERY_MAX_LIMIT=50
+ *
+ * app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
+ *
  */
 const MQUERY_LIMIT = getNumber('MQUERY_LIMIT', 10);
 const MQUERY_MAX_LIMIT = getNumber('MQUERY_MAX_LIMIT', 50);
 app.use(mquery({ limit: MQUERY_LIMIT, maxLimit: MQUERY_MAX_LIMIT }));
 
 /**
- * use express-respond middleware
+ * @description setup and use express-respond middleware
  * @see {@link https://github.com/lykmapipo/express-respond}
  * @author lally elias <lallyelias87@mail.com>
- * @since  0.10.0
+ * @license MIT
+ * @since  0.1.0
  * @version 0.1.0
+ * @example
+ *
+ * app.use(respond);
+ *
  */
 app.use(respond);
 
