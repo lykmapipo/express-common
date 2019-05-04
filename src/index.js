@@ -39,6 +39,8 @@ import { stream } from '@lykmapipo/logger';
  * @type {String}
  * @description setup and ensure process runtime environment
  * @default development
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
  * @example
@@ -55,6 +57,8 @@ process.env.NODE_ENV = getString('NODE_ENV', 'development');
  * @type {String}
  * @description setup and ensure process BASE_PATH
  * @default process.cwd()
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
  * @example
@@ -71,6 +75,8 @@ process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
  * @type {String}
  * @description setup and ensure process APP_PATH
  * @default process.cwd()
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
  * @since  0.1.0
  * @version 0.1.0
  * @example
@@ -91,7 +97,7 @@ process.env.APP_PATH = path.resolve(
  * available on request and response headers
  * @param {Request} request valid express request object
  * @param {Response} response valid express response object
- * @return {Function} next valid express next middlware to pass control to
+ * @param {Function} next valid express next middlware to pass control to
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.15.0
@@ -137,7 +143,7 @@ export const correlationId = (request, response, next) => {
  * @description http middleware to handle un matched routes
  * @param {Request} request valid express request object
  * @param {Response} response valid express response object
- * @return {Function} next valid express next middlware to pass control to
+ * @param {Function} next valid express next middlware to pass control to
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.15.0
@@ -165,7 +171,7 @@ export const notFound = (request, response, next) => {
  * @description http middleware to handle errors
  * @param {Request} request valid express request object
  * @param {Response} response valid express response object
- * @return {Function} next valid express next middlware to pass control to
+ * @param {Function} next valid express next middlware to pass control to
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.15.0
@@ -190,8 +196,8 @@ export const errorHandler = (error, request, response, next) => {
  * @function Router
  * @description factory to create express router with version
  * @param {Object} [optns] valid express router options plus its version
- * @param {String|Number} [optns.version] valid router version. default to 1
- * @return {Router} valid express router
+ * @param {String|Number} [optns.version=1] valid router version. default to 1
+ * @returns {Router} valid express router
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.15.0
@@ -211,9 +217,25 @@ export const errorHandler = (error, request, response, next) => {
 export { Router };
 
 /**
- * initialize express application
+ * @name app
+ * @function app
+ * @description express app with sensible defaults applied
+ * @returns {Object} valid express application
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.11.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { app, start } = require('@lykmapipo/express-common');
+ * app.get('/v1/users', (req, res, next) => { });
+ *
+ * start((error) => { ... });
+ * //=> curl --request GET --url /v1/users
+ *
  */
-const app = express();
+export const app = express();
 
 /**
  * set application environmnent
@@ -449,7 +471,7 @@ export const start = (port, listener) => {
  * @name testApp
  * @function testApp
  * @description express app used for api testing
- * @return {Object} valid express application
+ * @returns {Object} valid express application
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.11.0
@@ -473,22 +495,3 @@ export const testApp = () => {
   // return app fot testing
   return app;
 };
-
-/**
- * @name app
- * @function app
- * @description express app used for live api
- * @return {Object} valid express application
- * @author lally elias <lallyelias87@mail.com>
- * @license MIT
- * @since 0.11.0
- * @version 0.1.0
- * @public
- * @example
- *
- * const { app } = require('@lykmapipo/express-common');
- * app.get('/v1/verify', (req, res, next) => { });
- * app.start((error) => { ... });
- *
- */
-export default app;

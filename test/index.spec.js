@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import supertest from 'supertest';
 import { expect } from 'chai';
-import app, { mount, Router, testApp } from '../src/index';
+import { app, mount, Router, testApp } from '../src/index';
 
 describe('app', () => {
   it('should an instance of event emitter', () => {
