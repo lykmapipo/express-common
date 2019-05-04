@@ -249,6 +249,8 @@ export const app = express();
  * @version 0.1.0
  * @example
  *
+ * process.env.NODE_ENV=development
+ *
  * app.set('env', getString('NODE_ENV'));
  * app.get('env')
  * //=> development
@@ -268,6 +270,8 @@ app.set('env', getString('NODE_ENV', 'development'));
  * @version 0.1.0
  * @example
  *
+ * process.env.PORT=5000
+ *
  * app.set('port', getNumber('PORT', 5000));
  * app.get('port')
  * //=> 5000
@@ -276,7 +280,26 @@ app.set('env', getString('NODE_ENV', 'development'));
 app.set('port', getNumber('PORT', 5000));
 
 /**
- * @descrition setupt and use correlationId middleware
+ * @const
+ * @name trust proxy
+ * @type {Boolean}
+ * @default false
+ * @description indicates the app is behind a front-facing proxy.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since  0.16.0
+ * @version 0.1.0
+ * @example
+ *
+ * process.env.TRUST_PROXY=false
+ *
+ * app.set('trust proxy', getBoolean('TRUST_PROXY', false));
+ *
+ */
+app.set('trust proxy', getBoolean('TRUST_PROXY', false));
+
+/**
+ * @descrition setup and use correlationId middleware
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since  0.14.0
@@ -391,7 +414,7 @@ if (SERVE_FAVICON) {
  * @version 0.1.0
  * @example
  *
- * process.env.BODY_PARSER_LIMIT=2MB
+ * process.env.BODY_PARSER_LIMIT=2mb
  *
  * app.use(bodyParse.urlencoded({ ... }));
  *
