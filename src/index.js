@@ -1,20 +1,3 @@
-/**
- * @module express-common
- * @name express-common
- * @description minimal express app configuration
- * @author lally elias <lallyelias87@mail.com>
- * @license MIT
- * @since  0.1.0
- * @version 0.1.0
- * @example
- *
- * const { start } = require('@lykmapipo/express-common');
- * const app = start((error) => { ... });
- * //=> { [EventEmitter: app] ... }
- *
- */
-
-/* dependencies */
 import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
 import { resolve as resolvePath } from 'path';
 import _ from 'lodash';
@@ -777,4 +760,27 @@ export const put = (path, ...middlewares) => app.put(path, ...middlewares);
  *
  */
 export const patch = (path, ...middlewares) => app.patch(path, ...middlewares);
+
+/**
+ * @name del
+ * @function del
+ * @description handle HTTP DELETE requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { del } = require('@lykmapipo/express-common');
+ *
+ * del('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request DELETE --url /v1/users/1
+ *
+ */
 export const del = (path, ...middlewares) => app.delete(path, ...middlewares);
