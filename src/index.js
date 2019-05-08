@@ -693,6 +693,33 @@ export const all = (path, ...middlewares) => app.all(path, ...middlewares);
  *
  */
 export const get = (path, ...middlewares) => app.get(path, ...middlewares);
+
+/**
+ * @name post
+ * @function post
+ * @description handle HTTP POST requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { post } = require('@lykmapipo/express-common');
+ *
+ * post('/v1/users', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request POST \
+ * --url /v1/users \
+ * --data '{
+ *     "name": "John Doe"
+ *   }'
+ *
+ */
 export const post = (path, ...middlewares) => app.post(path, ...middlewares);
 export const put = (path, ...middlewares) => app.put(path, ...middlewares);
 export const patch = (path, ...middlewares) => app.patch(path, ...middlewares);
