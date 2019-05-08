@@ -1,3 +1,33 @@
+#### 0.17.0 (2019-05-08)
+
+##### Chores
+
+* **build:**  complite latest release ([b12b9f7a](https://github.com/lykmapipo/express-common/commit/b12b9f7a953259b51b1f3ecf08dce823492be232))
+* **ci:**  add npm test scipt after commitlint ([170621d8](https://github.com/lykmapipo/express-common/commit/170621d89e5f4bec1c13b0050e85c6052d2da20e))
+* **deps:**  force latest version & audit fix ([d6654660](https://github.com/lykmapipo/express-common/commit/d6654660b1a6448b3b1d84551364bce32dcec2a7))
+
+##### Documentation Changes
+
+*  update & simplify usage docs ([c6a0e607](https://github.com/lykmapipo/express-common/commit/c6a0e6078d68a96ccabad8c46ebf3c17013bd7aa))
+
+##### New Features
+
+*  expose commn http verbs shortcuts ([98de76f2](https://github.com/lykmapipo/express-common/commit/98de76f2588dfc94eb4d1396415039a9e0663327))
+
+##### Code Style Changes
+
+*  remove top package jsdocs ([9e3f2a27](https://github.com/lykmapipo/express-common/commit/9e3f2a273e1f7ce0a1ace58caa2a733dfa83bc76))
+*  write patch jsdocs ([2f9897ce](https://github.com/lykmapipo/express-common/commit/2f9897ce42f22287a2ba5bc7c7df0f7ddcbb6fef))
+*  write put jsdocs ([ad807216](https://github.com/lykmapipo/express-common/commit/ad8072168bb25380937a5c53ec90f4372726ff45))
+*  write pots jsdocs ([75c3c098](https://github.com/lykmapipo/express-common/commit/75c3c098f4ba337ba3a22d02c392812302d3b811))
+*  write get jsdocs ([bd353cc0](https://github.com/lykmapipo/express-common/commit/bd353cc078d234a9281b540a07c0292fcbe4fea2))
+*  write all jsdocs ([a47fe9fe](https://github.com/lykmapipo/express-common/commit/a47fe9fefca1c94b40040c508e0a5dcaa5cc8653))
+*  write use jsdocs ([c919374a](https://github.com/lykmapipo/express-common/commit/c919374a2fc96becdf2716e563be750c669c85d1))
+
+##### Tests
+
+*  fix handlers registrations for http method shortcuts ([6a1e7ae1](https://github.com/lykmapipo/express-common/commit/6a1e7ae1e28ab9cd5885bd246cc1ad6c5f96973e))
+
 #### 0.16.1 (2019-05-05)
 
 ##### Chores
