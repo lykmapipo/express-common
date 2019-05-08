@@ -721,6 +721,33 @@ export const get = (path, ...middlewares) => app.get(path, ...middlewares);
  *
  */
 export const post = (path, ...middlewares) => app.post(path, ...middlewares);
+
+/**
+ * @name put
+ * @function put
+ * @description handle HTTP PUT requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { put } = require('@lykmapipo/express-common');
+ *
+ * put('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request PUT \
+ * --url /v1/users/1 \
+ * --data '{
+ *     "name": "John Doe"
+ *   }'
+ *
+ */
 export const put = (path, ...middlewares) => app.put(path, ...middlewares);
 export const patch = (path, ...middlewares) => app.patch(path, ...middlewares);
 export const del = (path, ...middlewares) => app.delete(path, ...middlewares);
