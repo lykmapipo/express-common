@@ -639,6 +639,26 @@ export const testApp = () => {
  *
  */
 export const use = (...middlewares) => app.use(...middlewares);
+
+/**
+ * @name all
+ * @function all
+ * @description matches all HTTP verbs at the specified path.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { all } = require('@lykmapipo/express-common');
+ *
+ * all('/v1/users', (req, res, next) => {
+ *   console.log('Time: %d', Date.now());
+ *   next();
+ * });
+ *
+ */
 export const all = (path, ...middlewares) => app.all(path, ...middlewares);
 export const get = (path, ...middlewares) => app.get(path, ...middlewares);
 export const post = (path, ...middlewares) => app.post(path, ...middlewares);
