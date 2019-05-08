@@ -89,10 +89,10 @@
   },
   "peerDependencies": {},
   "dependencies": {
-    "@lykmapipo/common": ">=0.17.2",
-    "@lykmapipo/env": ">=0.7.4",
+    "@lykmapipo/common": ">=0.17.3",
+    "@lykmapipo/env": ">=0.7.5",
     "@lykmapipo/express-request-extra": ">=0.1.4",
-    "@lykmapipo/express-router-extra": ">=0.3.3",
+    "@lykmapipo/express-router-extra": ">=0.4.0",
     "@lykmapipo/logger": ">=0.3.0",
     "async": ">=2.6.2",
     "body-parser": ">=1.19.0",

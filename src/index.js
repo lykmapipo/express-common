@@ -4,7 +4,7 @@ import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { mergeObjects } from '@lykmapipo/common';
 import express from '@lykmapipo/express-request-extra';
-import { mount as doMount, Router } from '@lykmapipo/express-router-extra';
+import { mountInto, Router } from '@lykmapipo/express-router-extra';
 import morgan from 'morgan';
 import cors from 'cors';
 import compression from 'compression';
@@ -529,9 +529,7 @@ app.use(respond);
  * //=> { [EventEmitter: app] ... }
  *
  */
-export const mount = (...routers) => {
-  return doMount(...routers).into(app);
-};
+export const mount = (...routers) => mountInto(app, ...routers);
 
 /**
  * @name start

@@ -310,11 +310,9 @@ describe('mount', () => {
     router.get('/samples', (req, res) => {
       res.json(req.body);
     });
-    const mounted = mount(router);
+    mount(router);
 
     // after
-    expect(mounted.routers).to.exist;
-    expect(mounted.routers).to.have.length(1);
     expect(app._router).to.exist;
     expect(app._router.stack).to.exist;
     const found = _.find(app._router.stack, ['handle.uuid', router.uuid]);
@@ -328,11 +326,9 @@ describe('mount', () => {
     router.get('/samples', (req, res) => {
       res.json(req.body);
     });
-    const mounted = mount(router, router);
+    mount(router, router);
 
     // after
-    expect(mounted.routers).to.exist;
-    expect(mounted.routers).to.have.length(1);
     expect(app._router).to.exist;
     expect(app._router.stack).to.exist;
     const founds = _.filter(app._router.stack, ['handle.uuid', router.uuid]);
@@ -353,11 +349,9 @@ describe('mount', () => {
       res.json(req.body);
     });
 
-    const mounted = mount(routerA, routerB);
+    mount(routerA, routerB);
 
     // after
-    expect(mounted.routers).to.exist;
-    expect(mounted.routers).to.have.length(2);
     expect(app._router).to.exist;
     expect(app._router.stack).to.exist;
 
