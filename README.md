@@ -24,7 +24,7 @@ It use below packages:
 ## Requirements
 
 - NodeJS v9.3.0+
-- mongoose v5.0.9+
+- express v4.16.4+
 
 ## Install
 ```sh
@@ -32,17 +32,16 @@ $ npm install --save @lykmapipo/express-common
 ```
 
 ## Usage
-
 ```js
-const { mount, Router, start } = require('@lykmapipo/express-common');
+const { get, post, patch, del, start } = require('@lykmapipo/express-common');
 
-const router = new Router({
-    version: '1.0.0'
-});
-router.get('/users', ...);
-mount(router);
+get('/v1/users', (req, res) => res.ok({ ... }));
+get('/v1/users/:id', (req, res) => res.ok({ ... }));
+post('/v1/users', (req, res) => res.created({ ... }));
+patch('/v1/users:/id', (req, res) => res.ok({ ... }));
+del('/v1/users:/id', (req, res) => res.ok({ ... }));
 
-start((error) => { ... });
+start(error => { ... });
 ```
 
 ```curl
@@ -53,15 +52,21 @@ curl http://0.0.0.0:5000/v1/users
 ```js
 NODE_ENV=development
 PORT=5000
+
 TRUST_PROXY=false
+
 SERVE_STATIC=true
 SERVE_STATIC_PATH=public
 SERVE_FAVICON=false
+
 BODY_PARSER_LIMIT=2mb
 BODY_PARSER_JSON_TYPE=application/json
+
 HELMET_HSTS=false
+
 MQUERY_LIMIT=10
 MQUERY_MAX_LIMIT=50
+
 LOGGER_LOG_ENABLED=true
 LOGGER_LOG_LEVEL=silly
 LOGGER_USE_CONSOLE=true
