@@ -1,5 +1,5 @@
 import { getString, getNumber, getBoolean, isTest } from '@lykmapipo/env';
-import path from 'path';
+import { resolve } from 'path';
 import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { mergeObjects } from '@lykmapipo/common';
@@ -16,22 +16,6 @@ import helmet from 'helmet';
 import mquery from 'express-mquery';
 import respond from 'express-respond';
 import { stream } from '@lykmapipo/logger';
-
-/**
- * @module express-common
- * @name express-common
- * @description minimal express app configuration
- * @author lally elias <lallyelias87@mail.com>
- * @license MIT
- * @since  0.1.0
- * @version 0.1.0
- * @example
- *
- * const { start } = require('@lykmapipo/express-common');
- * const app = start((error) => { ... });
- * //=> { [EventEmitter: app] ... }
- *
- */
 
 /**
  * @constant
@@ -85,7 +69,7 @@ process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
  * //=> /home/...
  *
  */
-process.env.APP_PATH = path.resolve(
+process.env.APP_PATH = resolve(
   process.env.BASE_PATH,
   process.env.APP_PATH || ''
 );
@@ -355,7 +339,7 @@ const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
 let STATIC_PATH;
 if (SERVE_STATIC) {
   STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
-  STATIC_PATH = path.resolve(getString('BASE_PATH'), STATIC_PATH);
+  STATIC_PATH = resolve(getString('BASE_PATH'), STATIC_PATH);
   app.use(express.static(STATIC_PATH));
 }
 
@@ -375,7 +359,7 @@ if (SERVE_STATIC) {
  */
 const SERVE_FAVICON = getBoolean('SERVE_FAVICON', false);
 if (SERVE_FAVICON) {
-  const FAVICON_PATH = path.resolve(STATIC_PATH, 'favicon.ico');
+  const FAVICON_PATH = resolve(STATIC_PATH, 'favicon.ico');
   app.use(serveFavicon(FAVICON_PATH));
 }
 
@@ -594,4 +578,187 @@ const testApp = () => {
   return app;
 };
 
-export { app, correlationId, errorHandler, mount, notFound, start, testApp };
+/**
+ * @name use
+ * @function use
+ * @description mounts specified middlewares at the specified path.
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { use } = require('@lykmapipo/express-common');
+ *
+ * use('/v1/users', (req, res, next) => {
+ *   console.log('Time: %d', Date.now());
+ *   next();
+ * });
+ *
+ */
+const use = (...middlewares) => app.use(...middlewares);
+
+/**
+ * @name all
+ * @function all
+ * @description matches all HTTP verbs at the specified path.
+ * @param {String} path path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { all } = require('@lykmapipo/express-common');
+ *
+ * all('/v1/users', (req, res, next) => {
+ *   console.log('Time: %d', Date.now());
+ *   next();
+ * });
+ *
+ */
+const all = (path, ...middlewares) => app.all(path, ...middlewares);
+
+/**
+ * @name get
+ * @function get
+ * @description handle HTTP GET requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { get } = require('@lykmapipo/express-common');
+ *
+ * get('/v1/users', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request GET --url /v1/users
+ *
+ * get('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request GET --url /v1/users/1
+ *
+ */
+const get = (path, ...middlewares) => app.get(path, ...middlewares);
+
+/**
+ * @name post
+ * @function post
+ * @description handle HTTP POST requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { post } = require('@lykmapipo/express-common');
+ *
+ * post('/v1/users', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request POST \
+ * --url /v1/users \
+ * --data '{
+ *     "name": "John Doe"
+ *   }'
+ *
+ */
+const post = (path, ...middlewares) => app.post(path, ...middlewares);
+
+/**
+ * @name put
+ * @function put
+ * @description handle HTTP PUT requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { put } = require('@lykmapipo/express-common');
+ *
+ * put('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request PUT \
+ * --url /v1/users/1 \
+ * --data '{
+ *     "name": "John Doe"
+ *   }'
+ *
+ */
+const put = (path, ...middlewares) => app.put(path, ...middlewares);
+
+/**
+ * @name patch
+ * @function patch
+ * @description handle HTTP PATCH requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { patch } = require('@lykmapipo/express-common');
+ *
+ * patch('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request PATCH \
+ * --url /v1/users/1 \
+ * --data '{
+ *     "name": "John Doe"
+ *   }'
+ *
+ */
+const patch = (path, ...middlewares) => app.patch(path, ...middlewares);
+
+/**
+ * @name del
+ * @function del
+ * @description handle HTTP DELETE requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { del } = require('@lykmapipo/express-common');
+ *
+ * del('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request DELETE --url /v1/users/1
+ *
+ */
+const del = (path, ...middlewares) => app.delete(path, ...middlewares);
+
+export { all, app, correlationId, del, errorHandler, get, mount, notFound, patch, post, put, start, testApp, use };
