@@ -619,6 +619,25 @@ export const testApp = () => {
   return app;
 };
 
+/**
+ * @name use
+ * @function use
+ * @description mounts specified middlewares at the specified path.
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { use } = require('@lykmapipo/express-common');
+ *
+ * use('/v1/users', (req, res, next) => {
+ *   console.log('Time: %d', Date.now());
+ *   next();
+ * });
+ *
+ */
 export const use = (...middlewares) => app.use(...middlewares);
 export const all = (path, ...middlewares) => app.all(path, ...middlewares);
 export const get = (path, ...middlewares) => app.get(path, ...middlewares);
