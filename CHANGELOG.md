@@ -1,3 +1,9 @@
+#### 0.17.1 (2019-05-08)
+
+##### Refactors
+
+*  use latest router mountInto ([90ccb8a0](https://github.com/lykmapipo/express-common/commit/90ccb8a0e37e9a54e85a0ef8eb9b6fa4aac74bac))
+
 #### 0.17.0 (2019-05-08)
 
 ##### Chores
