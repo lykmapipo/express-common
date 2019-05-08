@@ -623,6 +623,8 @@ export const testApp = () => {
  * @name use
  * @function use
  * @description mounts specified middlewares at the specified path.
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.17.0
@@ -644,6 +646,8 @@ export const use = (...middlewares) => app.use(...middlewares);
  * @name all
  * @function all
  * @description matches all HTTP verbs at the specified path.
+ * @param {String} path path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
  * @author lally elias <lallyelias87@mail.com>
  * @license MIT
  * @since 0.17.0
@@ -660,6 +664,34 @@ export const use = (...middlewares) => app.use(...middlewares);
  *
  */
 export const all = (path, ...middlewares) => app.all(path, ...middlewares);
+
+/**
+ * @name get
+ * @function get
+ * @description handle HTTP GET requests at specified path with specified
+ * callback function(s).
+ * @param {String} [path] path for which the middleware functions are invoked
+ * @param {...Function} middlewares valid middleware functions
+ * @author lally elias <lallyelias87@mail.com>
+ * @license MIT
+ * @since 0.17.0
+ * @version 0.1.0
+ * @public
+ * @example
+ *
+ * const { get } = require('@lykmapipo/express-common');
+ *
+ * get('/v1/users', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request GET --url /v1/users
+ *
+ * get('/v1/users/:id', (req, res, next) => {
+ *   res.ok({ ... })
+ * });
+ * //=> curl --request GET --url /v1/users/1
+ *
+ */
 export const get = (path, ...middlewares) => app.get(path, ...middlewares);
 export const post = (path, ...middlewares) => app.post(path, ...middlewares);
 export const put = (path, ...middlewares) => app.put(path, ...middlewares);
