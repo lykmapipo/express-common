@@ -16,7 +16,7 @@
 
 /* dependencies */
 import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
-import path from 'path';
+import { resolve as resolvePath } from 'path';
 import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { mergeObjects } from '@lykmapipo/common';
@@ -85,7 +85,7 @@ process.env.BASE_PATH = getString('BASE_PATH', process.cwd());
  * //=> /home/...
  *
  */
-process.env.APP_PATH = path.resolve(
+process.env.APP_PATH = resolvePath(
   process.env.BASE_PATH,
   process.env.APP_PATH || ''
 );
@@ -380,7 +380,7 @@ const SERVE_STATIC = getBoolean('SERVE_STATIC', false);
 let STATIC_PATH;
 if (SERVE_STATIC) {
   STATIC_PATH = getString('SERVE_STATIC_PATH', 'public');
-  STATIC_PATH = path.resolve(getString('BASE_PATH'), STATIC_PATH);
+  STATIC_PATH = resolvePath(getString('BASE_PATH'), STATIC_PATH);
   app.use(express.static(STATIC_PATH));
 }
 
@@ -400,7 +400,7 @@ if (SERVE_STATIC) {
  */
 const SERVE_FAVICON = getBoolean('SERVE_FAVICON', false);
 if (SERVE_FAVICON) {
-  const FAVICON_PATH = path.resolve(STATIC_PATH, 'favicon.ico');
+  const FAVICON_PATH = resolvePath(STATIC_PATH, 'favicon.ico');
   app.use(serveFavicon(FAVICON_PATH));
 }
 
@@ -618,3 +618,11 @@ export const testApp = () => {
   // return app fot testing
   return app;
 };
+
+export const use = (...middlewares) => app.use(...middlewares);
+export const all = (path, ...middlewares) => app.all(path, ...middlewares);
+export const get = (path, ...middlewares) => app.get(path, ...middlewares);
+export const post = (path, ...middlewares) => app.post(path, ...middlewares);
+export const put = (path, ...middlewares) => app.put(path, ...middlewares);
+export const patch = (path, ...middlewares) => app.patch(path, ...middlewares);
+export const del = (path, ...middlewares) => app.delete(path, ...middlewares);

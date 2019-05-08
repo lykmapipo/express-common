@@ -1,7 +1,19 @@
 import _ from 'lodash';
 import supertest from 'supertest';
 import { expect } from 'chai';
-import { app, mount, Router, testApp } from '../src/index';
+import {
+  app,
+  use,
+  all,
+  get,
+  post,
+  put,
+  patch,
+  del,
+  mount,
+  Router,
+  testApp,
+} from '../src/index';
 
 describe('app', () => {
   it('should an instance of event emitter', () => {
@@ -356,5 +368,56 @@ describe('mount', () => {
     const foundB = _.find(app._router.stack, ['handle.uuid', routerB.uuid]);
     expect(foundB).to.exist;
     expect(foundB.handle).to.eql(routerB);
+  });
+});
+
+describe('shortcuts', () => {
+  it('should apply middleware using `use` method', done => {
+    use('/use', (request, response) => response.ok());
+    supertest(app)
+      .get('/use')
+      .expect(200, done);
+  });
+
+  it('should handle any http verb using `all` method', done => {
+    all('/all', (request, response) => response.ok());
+    supertest(app)
+      .get('/all')
+      .expect(200, done);
+  });
+
+  it('should expose http `get` method', done => {
+    get('/get', (request, response) => response.ok());
+    supertest(app)
+      .get('/get')
+      .expect(200, done);
+  });
+
+  it('should expose http `post` method', done => {
+    post('/post', (request, response) => response.created());
+    supertest(app)
+      .post('/post')
+      .expect(201, done);
+  });
+
+  it('should expose http `put` method', done => {
+    put('/put', (request, response) => response.ok());
+    supertest(app)
+      .put('/put')
+      .expect(200, done);
+  });
+
+  it('should expose http `patch` method', done => {
+    patch('/patch', (request, response) => response.ok());
+    supertest(app)
+      .patch('/patch')
+      .expect(200, done);
+  });
+
+  it('should expose http `delete` method', done => {
+    del('/del', (request, response) => response.ok());
+    supertest(app)
+      .del('/del')
+      .expect(200, done);
   });
 });
