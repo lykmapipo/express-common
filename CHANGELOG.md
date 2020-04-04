@@ -1,3 +1,13 @@
+#### 0.18.0 (2020-04-04)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([62c82337](https://github.com/lykmapipo/express-common/commit/62c82337a0d6de0685ab521cef0fbce7ba75a39e))
+
+##### Refactors
+
+*  use latest uuid version ([440d724d](https://github.com/lykmapipo/express-common/commit/440d724d22168af02d02d406672432bf036e0130))
+
 #### 0.17.24 (2020-03-30)
 
 ##### Chores

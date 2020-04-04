@@ -1,7 +1,7 @@
 import { getString, getNumber, getBoolean, isTest } from '@lykmapipo/env';
 import { resolve } from 'path';
 import _ from 'lodash';
-import uuidv1 from 'uuid/v1';
+import { v1 } from 'uuid';
 import { mergeObjects } from '@lykmapipo/common';
 import express from '@lykmapipo/express-request-extra';
 import { mountInto } from '@lykmapipo/express-router-extra';
@@ -102,7 +102,7 @@ const correlationId = (request, response, next) => {
     request.get('X-Request-Id') || request.get('X-Correlation-Id');
 
   // ensure requestId
-  requestId = _.isEmpty(requestId) ? uuidv1() : requestId;
+  requestId = _.isEmpty(requestId) ? v1() : requestId;
 
   // merge to request headers
   request.headers = mergeObjects(
