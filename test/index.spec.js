@@ -54,7 +54,7 @@ describe('cors', () => {
     response.json({});
   });
 
-  it('should set `cors` middleware', done => {
+  it('should set `cors` middleware', (done) => {
     supertest(app)
       .get('/cors')
       .set('Accept-Encoding', 'gzip, deflate, br')
@@ -70,7 +70,7 @@ describe('compression', () => {
     response.json({});
   });
 
-  it('should be able to serve static content', done => {
+  it('should be able to serve static content', (done) => {
     supertest(app)
       .get('/compressions')
       .set('Accept-Encoding', 'gzip, deflate, br')
@@ -83,7 +83,7 @@ describe('compression', () => {
 });
 
 describe('serve static', () => {
-  it('should be able to serve static content', done => {
+  it('should be able to serve static content', (done) => {
     supertest(app)
       .get('/sample.png')
       .set('Accept-Encoding', 'gzip, deflate, br')
@@ -99,7 +99,7 @@ describe('body parser', () => {
     response.json(request.body);
   });
 
-  it('should be able to parse json bodies', done => {
+  it('should be able to parse json bodies', (done) => {
     const body = {
       point: 4,
     };
@@ -119,7 +119,7 @@ describe('body parser', () => {
       });
   });
 
-  it('should be able to parse url-encoded bodies', done => {
+  it('should be able to parse url-encoded bodies', (done) => {
     const body = {
       grade: 'A',
     };
@@ -146,7 +146,7 @@ describe('overrides', () => {
     response.json(request.body);
   });
 
-  it('should set `overrides` middleware', done => {
+  it('should set `overrides` middleware', (done) => {
     supertest(app)
       .get('/overrides')
       .expect(200)
@@ -154,7 +154,7 @@ describe('overrides', () => {
       .end(done);
   });
 
-  it('should set `overrides` middleware', done => {
+  it('should set `overrides` middleware', (done) => {
     supertest(app)
       .post('/overrides')
       .set('X-HTTP-Method', 'DELETE')
@@ -163,7 +163,7 @@ describe('overrides', () => {
       .end(done);
   });
 
-  it('should set `overrides` middleware', done => {
+  it('should set `overrides` middleware', (done) => {
     supertest(app)
       .post('/overrides')
       .set('X-HTTP-Method-Override', 'DELETE')
@@ -172,7 +172,7 @@ describe('overrides', () => {
       .end(done);
   });
 
-  it('should set `overrides` middleware', done => {
+  it('should set `overrides` middleware', (done) => {
     supertest(app)
       .post('/overrides')
       .set('X-Method-Override', 'DELETE')
@@ -181,7 +181,7 @@ describe('overrides', () => {
       .end(done);
   });
 
-  it('should set `overrides` middleware', done => {
+  it('should set `overrides` middleware', (done) => {
     supertest(app)
       .post('/overrides?_method=DELETE')
       .expect(200)
@@ -195,7 +195,7 @@ describe('helmet', () => {
     response.json({});
   });
 
-  it('should set `helmet` middleware', done => {
+  it('should set `helmet` middleware', (done) => {
     supertest(app)
       .get('/helmets')
       .expect(200)
@@ -217,7 +217,7 @@ describe('request-id', () => {
     response.json({});
   });
 
-  it('should set `request-id` middleware', done => {
+  it('should set `request-id` middleware', (done) => {
     supertest(app)
       .get('/request-id')
       .expect(200)
@@ -237,7 +237,7 @@ describe('mquery', () => {
     response.json(request.mquery);
   });
 
-  it('should set `mquery` middleware', done => {
+  it('should set `mquery` middleware', (done) => {
     const query = {
       filter: { age: { $gte: 12 } },
       paginate: { limit: 20, skip: 0, page: 1 },
@@ -272,7 +272,7 @@ describe('respond', () => {
     response.ok({});
   });
 
-  it('should set `respond` middleware', done => {
+  it('should set `respond` middleware', (done) => {
     supertest(app)
       .get('/respond')
       .set('Accept-Encoding', 'gzip, deflate, br')
@@ -286,7 +286,7 @@ describe('respond', () => {
     response.error(new Error('Server Error'));
   });
 
-  it('should set `respond` middleware', done => {
+  it('should set `respond` middleware', (done) => {
     supertest(app)
       .get('/respond-error')
       .set('Accept-Encoding', 'gzip, deflate, br')
@@ -374,45 +374,31 @@ describe('shortcuts', () => {
   patch('/patch', (request, response) => response.ok());
   del('/del', (request, response) => response.ok());
 
-  it('should apply middleware using `use` method', done => {
-    supertest(app)
-      .get('/use')
-      .expect(200, done);
+  it('should apply middleware using `use` method', (done) => {
+    supertest(app).get('/use').expect(200, done);
   });
 
-  it('should handle any http verb using `all` method', done => {
-    supertest(app)
-      .get('/all')
-      .expect(200, done);
+  it('should handle any http verb using `all` method', (done) => {
+    supertest(app).get('/all').expect(200, done);
   });
 
-  it('should expose http `get` method', done => {
-    supertest(app)
-      .get('/get')
-      .expect(200, done);
+  it('should expose http `get` method', (done) => {
+    supertest(app).get('/get').expect(200, done);
   });
 
-  it('should expose http `post` method', done => {
-    supertest(app)
-      .post('/post')
-      .expect(201, done);
+  it('should expose http `post` method', (done) => {
+    supertest(app).post('/post').expect(201, done);
   });
 
-  it('should expose http `put` method', done => {
-    supertest(app)
-      .put('/put')
-      .expect(200, done);
+  it('should expose http `put` method', (done) => {
+    supertest(app).put('/put').expect(200, done);
   });
 
-  it('should expose http `patch` method', done => {
-    supertest(app)
-      .patch('/patch')
-      .expect(200, done);
+  it('should expose http `patch` method', (done) => {
+    supertest(app).patch('/patch').expect(200, done);
   });
 
-  it('should expose http `delete` method', done => {
-    supertest(app)
-      .del('/del')
-      .expect(200, done);
+  it('should expose http `delete` method', (done) => {
+    supertest(app).del('/del').expect(200, done);
   });
 });
