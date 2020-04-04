@@ -1,7 +1,7 @@
 import { getString, getBoolean, getNumber, isTest } from '@lykmapipo/env';
 import { resolve as resolvePath } from 'path';
 import _ from 'lodash';
-import uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import { mergeObjects } from '@lykmapipo/common';
 import express from '@lykmapipo/express-request-extra';
 import { mountInto, Router } from '@lykmapipo/express-router-extra';
