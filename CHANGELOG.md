@@ -1,3 +1,9 @@
+#### 0.18.13 (2020-09-03)
+
+##### Chores
+
+* **deps:**  force latest version & audit fix ([fedaba8c](https://github.com/lykmapipo/express-common/commit/fedaba8cbc6efe1597b1933aa1f15df2841dadab))
+
 #### 0.18.12 (2020-08-06)
 
 ##### Chores
