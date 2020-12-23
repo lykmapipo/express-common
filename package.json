@@ -1,6 +1,6 @@
 {
   "name": "@lykmapipo/express-common",
-  "version": "0.18.14",
+  "version": "0.18.15",
   "description": "minimal express app configuration",
   "main": "lib/index.js",
   "module": "es/index.js",
