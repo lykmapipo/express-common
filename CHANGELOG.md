@@ -1,3 +1,9 @@
+#### 0.18.17 (2021-08-19)
+
+##### Refactors
+
+* **examples:**  migrate to es6 ([cd0ee94e](https://github.com/lykmapipo/express-common/commit/cd0ee94e17910e6d5cc73400c01a0ee84494f160))
+
 #### 0.18.16 (2021-02-16)
 
 #### 0.18.15 (2020-12-23)
