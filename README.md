@@ -1,8 +1,14 @@
 # express-common
 
-[![Build Status](https://travis-ci.org/lykmapipo/express-common.svg?branch=master)](https://travis-ci.org/lykmapipo/express-common)
-[![Dependency Status](https://img.shields.io/david/lykmapipo/express-common.svg?style=flat)](https://david-dm.org/lykmapipo/express-common)
-[![npm version](https://badge.fury.io/js/%40lykmapipo%2Fexpress-common.svg)](https://badge.fury.io/js/@lykmapipo/express-common)
+[![Build Status](https://travis-ci.com/lykmapipo/express-common.svg?branch=master)](https://travis-ci.com/lykmapipo/express-common)
+[![Dependencies Status](https://david-dm.org/lykmapipo/express-common.svg)](https://david-dm.org/lykmapipo/express-common)
+[![Coverage Status](https://coveralls.io/repos/github/lykmapipo/express-common/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/express-common?branch=master)
+[![GitHub License](https://img.shields.io/github/license/lykmapipo/express-common)](https://github.com/lykmapipo/express-common/blob/master/LICENSE)
+
+[![Commitizen Friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Code Style](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
+[![npm version](https://img.shields.io/npm/v/@lykmapipo/express-common)](https://www.npmjs.com/package/@lykmapipo/express-common)
 
 
 minimal express app configuration.
@@ -33,7 +39,7 @@ $ npm install --save @lykmapipo/express-common
 
 ## Usage
 ```js
-const { get, post, patch, del, start } = require('@lykmapipo/express-common');
+import { get, post, patch, del, start } from '@lykmapipo/express-common';
 
 get('/v1/users', (req, res) => res.ok({ ... }));
 get('/v1/users/:id', (req, res) => res.ok({ ... }));
