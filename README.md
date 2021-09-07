@@ -1,6 +1,6 @@
 # express-common
 
-[![Build Status](https://travis-ci.com/lykmapipo/express-common.svg?branch=master)](https://travis-ci.com/lykmapipo/express-common)
+[![Build Status](https://app.travis-ci.com/lykmapipo/express-common.svg?branch=master)](https://app.travis-ci.com/lykmapipo/express-common)
 [![Dependencies Status](https://david-dm.org/lykmapipo/express-common.svg)](https://david-dm.org/lykmapipo/express-common)
 [![Coverage Status](https://coveralls.io/repos/github/lykmapipo/express-common/badge.svg?branch=master)](https://coveralls.io/github/lykmapipo/express-common?branch=master)
 [![GitHub License](https://img.shields.io/github/license/lykmapipo/express-common)](https://github.com/lykmapipo/express-common/blob/master/LICENSE)
